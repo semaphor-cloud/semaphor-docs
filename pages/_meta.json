@@ -1,15 +1,17 @@
 {
-  "index": "Introduction",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
+  "index": "Overview",
+  "getting-started": "Getting Started",
+  "integrate": "Integrate into your app",
   "about": {
     "title": "About",
-    "type": "page"
+    "type": "page",
+    "href": "https://semaphor.cloud",
+    "newWindow": true
   },
   "contact": {
     "title": "Contact ↗",
     "type": "page",
-    "href": "https://twitter.com/shuding_",
+    "href": "mailto:info@semaphor.cloud",
     "newWindow": true
   }
 }
