@@ -17,13 +17,18 @@ const DASHBOARD_ID = 'd_cf007a8b-19bc-46ad-8787-2915445b7b86'; // Replace with y
 const DASHBOARD_SECRET = 'ds_f32f0b30-b7e1-40f9-ba6a-9804a5b9d635'; // Replace with your actual dashboard secret
 const TOKEN_URL = 'https://semaphor.cloud/api/v1/token';
 
-async function getToken() {
-  const url = new URL(TOKEN_URL);
-  url.searchParams.append('dashboardId', DASHBOARD_ID);
-  url.searchParams.append('dashboardSecret', DASHBOARD_SECRET);
-
+async function fetchToken() {
   try {
-    const response = await fetch(url);
+    const response = await fetch(TOKEN_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dashboardId: DASHBOARD_ID,
+        dashboardSecret: DASHBOARD_SECRET,
+      }),
+    });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -66,7 +71,7 @@ Here is the complete React code that uses the above steps. You can copy and past
 ```tsx copy
 import { useEffect, useState } from 'react';
 import { AuthToken, Dashboard } from 'react-semaphor';
-import '../node_modules/react-semaphor/dist/style.css'; // IMPORTANT! Include the CSS file.
+import '../node_modules/react-semaphor/dist/style.css'; // IMPORTANT! Include the CSS file. This is the default style, you can customize it.
 
 const DASHBOARD_ID = 'd_cf007a8b-19bc-46ad-8787-2915445b7b86'; // Replace with your actual dashboard ID
 const DASHBOARD_SECRET = 'ds_f32f0b30-b7e1-40f9-ba6a-9804a5b9d635'; // Replace with your actual dashboard secret
@@ -76,13 +81,18 @@ function App() {
   const [authToken, setAuthToken] = useState<AuthToken>();
 
   useEffect(() => {
-    async function getToken() {
-      const url = new URL(TOKEN_URL);
-      url.searchParams.append('dashboardId', DASHBOARD_ID);
-      url.searchParams.append('dashboardSecret', DASHBOARD_SECRET);
-
+    async function fetchToken() {
       try {
-        const response = await fetch(url);
+        const response = await fetch(TOKEN_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            dashboardId: DASHBOARD_ID,
+            dashboardSecret: DASHBOARD_SECRET,
+          }),
+        });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -95,7 +105,7 @@ function App() {
         console.error('There was an error!', error);
       }
     }
-    getToken();
+    fetchToken();
   }, []);
 
   return (
