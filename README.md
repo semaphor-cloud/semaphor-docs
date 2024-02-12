@@ -1,4 +1,4 @@
-Integrate the Semaphor dashboard into your app in 3 simple steps.
+Integrate the Semaphor dashboard into your app in three simple steps.
 
 #### **1) Install Semaphor Package**
 
