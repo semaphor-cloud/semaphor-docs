@@ -1,4 +1,4 @@
-Integrating dashboard into your app is a straightforward three-step process.
+Integrate the Semaphor dashboard into your app in three simple steps.
 
 #### **1) Install Semaphor Package**
 
