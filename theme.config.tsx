@@ -8,10 +8,9 @@ const config: DocsThemeConfig = {
       <Logo />
     </span>
   ),
-  // project: {
-  //   link: 'https://www.npmjs.com/package/@semaphor/react-semaphor',
-
-  // },
+  project: {
+    link: 'https://github.com/semaphor-cloud/semaphor-docs',
+  },
   // chat: {
   //   link: 'https://discord.com',
   // },
