@@ -1,0 +1,123 @@
+## **Web Component**
+
+This example is based on the assumption that you are working with vanilla JavaScript in an HTML environment. It involves a script that fetches the token and passes it to the `auth-token` attribute once the token is retrieved.
+
+Let's first initialize a vanilla JavaScript project using Vite.
+
+```markdown
+npm create vite@latest
+
+✔ Project name: … vite-vanilla
+✔ Select a framework: › Vanilla
+✔ Select a variant: › JavaScript
+
+Scaffolding project in /sourcecode/semaphor-demos/vite-vanilla...
+
+Done. Now run:
+
+cd vite-vanilla
+npm install
+npm run dev
+```
+
+### **1) Install Semaphor Package**
+
+After running the above commands, open the project in your editor and install the `semaphor` package.
+
+```markdown copy
+npm i semaphor
+```
+
+### **2) Get Auth Token**
+
+Create a `dashboard.js` file at the root of your project and paste the following code. This code retrieves the `AuthToken`, which is necessary for the dashboard to render.
+
+**Note:** `auth-token` is used as an attribute of a web component. Web components adhere to the kebab-case naming convention, which involves writing words in lowercase and separating them with hyphens (`-`). This convention is used for attribute names and CSS class names, as camelCase is not supported.
+
+```jsx copy
+//dashboard.js
+
+import { DashboardWC } from 'semaphor'; // import the web component - denoted by WC suffix.
+customElements.define('semaphor-dashboard', DashboardWC); // define the web component.
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Constants for the fetch call
+  const DASHBOARD_ID = 'd_cf007a8b-19bc-46ad-8787-2915445b7b86'; // Replace with your actual dashboard ID
+  const DASHBOARD_SECRET = 'ds_f32f0b30-b7e1-40f9-ba6a-9804a5b9d635'; // Replace with your actual dashboard secret
+  const TOKEN_URL = 'https://semaphor.cloud/api/v1/token';
+
+  // Function to fetch token
+  async function fetchToken() {
+    try {
+      const response = await fetch(TOKEN_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          dashboardId: DASHBOARD_ID,
+          dashboardSecret: DASHBOARD_SECRET,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const token = await response.json();
+      if (token?.accessToken) {
+        updateDashboardAuthToken(token);
+      }
+    } catch (error) {
+      console.error('There was an error!', error);
+    }
+  }
+
+  // Function to update the web component's auth-token attribute
+  function updateDashboardAuthToken(token) {
+    const authTokenString = JSON.stringify(token);
+    const dashboardElement = document.getElementById(DASHBOARD_ID);
+    if (dashboardElement) {
+      dashboardElement.setAttribute('auth-token', authTokenString);
+    } else {
+      console.error('Dashboard element not found');
+    }
+  }
+
+  // Fetch and set the token when the DOM content is fully loaded
+  fetchToken();
+});
+```
+
+### **3) Reference Web Component in HTML**
+
+And finally, let's add the following three lines to the `index.html` file as below:
+
+- **Styles** `<link rel="stylesheet" href="./node_modules/semaphor/dist/style.css" />` initalizes the styles. This is IMPORTANT.
+- **Web Component** `<semaphor-dashboard id="d_cf007a8b-19bc-46ad-8787-2915445b7b86" />` is the web component that renders the dashbaord,
+- **Token** `<script type="module" src="./dashboard.js"></script>` references the code fetches the `AuthToken`.
+
+```html copy
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+    <link rel="stylesheet" href="./node_modules/semaphor/dist/style.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <semaphor-dashboard id="d_cf007a8b-19bc-46ad-8787-2915445b7b86" />
+    <script type="module" src="./dashboard.js"></script>
+  </body>
+</html>
+```
+
+### **Considerations:**
+
+- **Security:** Embedding secrets directly in your frontend code is not recommended. This example is for illustration purposes only, and assumes the **`DASHBOARD_SECRET`** is safe to expose (public dashboards), but, secrets should not be accessible on the client side. You might need a server-side solution to handle authentication securely.
+- **Error Handling**: The code includes basic error handling for the fetch call and element selection. Depending on your application's complexity and requirements, you might want to implement more sophisticated error handling.
+- **DOM Ready**: The script waits for the **`DOMContentLoaded`** event, ensuring the DOM is fully loaded before attempting to manipulate elements or fetch data. This is crucial for accessing elements that are defined later in the HTML document.
