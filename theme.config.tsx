@@ -18,6 +18,13 @@ const config: DocsThemeConfig = {
   footer: {
     text: '© 2024 Semaphor. All rights reserved.',
   },
+  feedback: {
+    useLink: () =>
+      'https://github.com/semaphor-cloud/semaphor-docs/issues/new?title=Feedback%20for%20%E2%80%9CSemaphor%E2%80%9D&labels=feedback',
+  },
+  editLink: {
+    component: null,
+  },
 };
 
 export default config;
