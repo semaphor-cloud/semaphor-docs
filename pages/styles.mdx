@@ -1,0 +1,177 @@
+## **Themes & Styles**
+
+You can personalize the styles, colors, and fonts of your dashboard using the **`style`** property of the component.
+
+```tsx
+<Dashboard id={DASHBOARD_ID} authToken={authToken} style={customStyle} />
+```
+
+### **Bring your own CSS**
+
+You can use CSS classes to precisely customize the appearance of your dashboard. You also have the option to use [Tailwindcss](https://tailwindcss.com/). You can find class annotations by looking at the `role` attribute of your DOM elements. These annotations are useful for targeting your CSS classes. For instance, the `dashboard-panel` class can be extended using the `dashboardPanel` property in the styles object provided below.
+
+```html filename="HTML" {5}
+<div class="h-full flex flex-col justify-between" role="dashboard-panel">
+  <div
+    dir="ltr"
+    data-orientation="horizontal"
+    role="dashboard-tabs-container"
+    class="grow bg-muted dark:bg-foreground/5 p-[2px] rounded-md"
+  ></div>
+  .....
+</div>
+```
+
+The `style` property provides the `default` and `dark` sub objects to customize the appearance based on the selected theme. If styles are not defined in the `dark` mode, the default styles are applied.
+
+```tsx
+import colors from 'tailwindcss/colors';
+
+export const DEFAULT_STYLE: TStyle = {
+  default: {
+    dashboardPanel: '', //class override for dashboard-panel
+    dashboardTabsContainer: '', //class override for dashboard-tabs-container
+    dashboardCardContainer: '', //class override for dashboard-card-container
+    dashboardCard: '', // class override for dashboard-card
+    gridLayout: {
+      // margin: [2, 2],
+      className: '', // class override for grid-layout
+    },
+    chart: {
+      font: {
+        family: 'Open Sans, sans-serif',
+        // family:
+        //   'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+      },
+      dataset: {
+        backgroundColor: [
+          colors.violet[400],
+          colors.red[400],
+          colors.amber[400],
+          colors.orange[400],
+          colors.rose[400],
+        ],
+        borderColor: [
+          colors.violet[400],
+          colors.red[400],
+          colors.amber[400],
+          colors.orange[400],
+          colors.rose[400],
+        ],
+      },
+      options: {
+        plugins: {
+          datalabels: {
+            display: false,
+          },
+          title: {
+            display: true,
+            // text: My Line Chart',
+          },
+          tooltip: {
+            backgroundColor: '#fff',
+            bodyColor: '#000',
+            borderWidth: 0.25,
+            titleColor: '#000',
+            borderColor: 'rgb(128,131,139)',
+            cornerRadius: 2,
+            boxPadding: 4,
+          },
+          legend: {
+            position: 'top',
+            align: 'center',
+            maxHeight: 0,
+          },
+        },
+        scales: {
+          y: {
+            grid: {
+              display: true,
+            },
+            title: {
+              display: true,
+              text: '',
+            },
+            beginAtZero: true,
+            ticks: {
+              precision: 0,
+            },
+          },
+          x: {
+            grid: {
+              display: true,
+            },
+            title: {
+              display: true,
+            },
+          },
+        },
+        layout: {
+          padding: {
+            top: -40,
+          },
+        },
+        borderRadius: 1,
+        responsive: true,
+        maintainAspectRatio: false,
+      },
+    },
+  },
+  dark: {
+    chart: {
+      dataset: {
+        backgroundColor: [
+          colors.teal[100],
+          colors.purple[100],
+          colors.amber[100],
+          colors.orange[100],
+          colors.rose[100],
+        ],
+        borderColor: [
+          colors.teal[400],
+          colors.purple[400],
+          colors.amber[400],
+          colors.orange[300],
+          colors.rose[400],
+        ],
+      },
+      options: {
+        plugins: {
+          tooltip: {
+            backgroundColor: '#000',
+            bodyColor: '#fff',
+            borderWidth: 0.25,
+            titleColor: '#fff',
+            borderColor: 'rgb(128,131,139)',
+            cornerRadius: 2,
+            boxPadding: 4,
+          },
+        },
+        datalabels: {
+          display: false,
+        },
+        scales: {
+          x: {
+            grid: {
+              display: true,
+              color: colors.slate[800],
+            },
+          },
+          y: {
+            grid: {
+              display: true,
+              color: colors.slate[800],
+            },
+          },
+        },
+      },
+    },
+  },
+};
+```
+
+### **Chart Options**
+
+Semaphore utilizes [Chart.js](https://www.chartjs.org/docs/latest/samples/bar/border-radius.html) as its visualization library, offering complete flexibility to customize every aspect of your chart. You can override the **`options`** property of the chart and set global properties for your dashboard. Alternatively, you can customize individual cards when creating the dashboard. The properties set for individual cards are more specific and override the global properties.
+
+You can refer to various chart types in the above link. It demonstrates how using options provides a declarative approach to your visualization experience.
