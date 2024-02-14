@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 ```
 
-### **3) Add Web Component to HTML**
+### **3) Use Web Component**
 
 And finally, let's add the following three lines to the `index.html` file as below:
 
@@ -112,8 +112,8 @@ And finally, let's add the following three lines to the `index.html` file as bel
 </html>
 ```
 
-### **Considerations:**
+### **Key Considerations**
 
-- **Security:** Embedding secrets directly in your frontend code is not recommended. This example is for illustration purposes only, and assumes the **`DASHBOARD_SECRET`** is safe to expose (public dashboards), but, secrets should not be accessible on the client side. You might need a server-side solution to handle authentication securely.
+- **Security:** Embedding secrets directly in your frontend code is not recommended. This example is for illustration purposes only, and assumes the `DASHBOARD_SECRET` is safe to expose (public dashboards), but, secrets should not be accessible on the client side. You might need a server-side solution to handle authentication securely.
 - **Error Handling**: The code includes basic error handling for the fetch call and element selection. Depending on your application's complexity and requirements, you might want to implement more sophisticated error handling.
-- **DOM Ready**: The script waits for the **`DOMContentLoaded`** event, ensuring the DOM is fully loaded before attempting to manipulate elements or fetch data. This is crucial for accessing elements that are defined later in the HTML document.
+- **DOM Ready**: The script waits for the `DOMContentLoaded` event, ensuring the DOM is fully loaded before attempting to manipulate elements or fetch data. This is crucial for accessing elements that are defined later in the HTML document.
