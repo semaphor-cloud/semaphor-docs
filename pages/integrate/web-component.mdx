@@ -34,9 +34,7 @@ Create a `dashboard.js` file at the root of your project and paste the following
 
 **Note:** `auth-token` is used as an attribute of a web component. Web components adhere to the kebab-case naming convention, which involves writing words in lowercase and separating them with hyphens (`-`). This convention is used for attribute names and CSS class names, as camelCase is not supported.
 
-```jsx copy
-//dashboard.js
-
+```jsx filename="dashboard.js" copy {1-2, 6-8}
 import { DashboardWC } from 'semaphor'; // import the web component - denoted by WC suffix.
 customElements.define('semaphor-dashboard', DashboardWC); // define the web component.
 
@@ -96,9 +94,7 @@ And finally, let's add the following three lines to the `index.html` file as bel
 - **Web Component** `<semaphor-dashboard id="d_cf007a8b-19bc-46ad-8787-2915445b7b86" />` is the web component that renders the dashbaord,
 - **Token** `<script type="module" src="./dashboard.js"></script>` references the code fetches the `AuthToken`.
 
-```html copy
-<!-- index.html -->
-
+```html {8, 12-13} filename="index.html" copy
 <!DOCTYPE html>
 <html lang="en">
   <head>
