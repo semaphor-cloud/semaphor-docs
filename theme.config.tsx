@@ -1,18 +1,41 @@
 import React from 'react';
 import { DocsThemeConfig } from 'nextra-theme-docs';
 import Logo from './logo';
+import { useRouter } from 'next/router';
+import { useConfig } from 'nextra-theme-docs';
 
 const config: DocsThemeConfig = {
-  head: (
-    <>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta property="og:title" content="Semaphor" />
-      <meta
-        property="og:description"
-        content="Infuse data signals into your apps"
-      />
-    </>
-  ),
+  // head: (
+  //   <>
+  //     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  //     <meta property="og:title" content="Semaphor" />
+  //     <meta
+  //       property="og:description"
+  //       content="Infuse data signals into your apps"
+  //     />
+  //   </>
+  // ),
+  head: () => {
+    const { asPath, defaultLocale, locale } = useRouter();
+    const { frontMatter } = useConfig();
+    const url =
+      'https://semaphor.cloud' +
+      (defaultLocale === locale ? asPath : `/${locale}${asPath}`);
+
+    console.log('frontMatter', frontMatter);
+    return (
+      <>
+        <meta property="og:url" content={url} />
+        <meta property="og:title" content={frontMatter.title || 'Semaphor'} />
+        <meta
+          property="og:description"
+          content={
+            frontMatter.description || 'Infuse data signals into your apps'
+          }
+        />
+      </>
+    );
+  },
   logo: (
     <span>
       <Logo />
