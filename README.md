@@ -1,4 +1,4 @@
-Integrating dashboard into your app is a straightforward three-step process.
+Integrating dashboard into your React app is a straightforward three-step process.
 
 ### **1) Install Semaphor Package**
 
@@ -12,7 +12,7 @@ npm i semaphor
 
 Before rendering the `Dashboard`, first acquire the `AuthToken`. This token enhances the security of your dashboard by restricting access to only users with the token. Make a POST fetch call as shown below.
 
-```jsx copy
+```jsx copy {1-3}
 const DASHBOARD_ID = 'd_cf007a8b-19bc-46ad-8787-2915445b7b86'; // Replace with your actual dashboard ID
 const DASHBOARD_SECRET = 'ds_f32f0b30-b7e1-40f9-ba6a-9804a5b9d635'; // Replace with your actual dashboard secret
 const TOKEN_URL = 'https://semaphor.cloud/api/v1/token';
@@ -47,7 +47,7 @@ async function fetchToken() {
 
 Here is a simple example of a React component that demonstrates how to use the `Dashboard` component from the `semaphor` package.
 
-```tsx copy
+```tsx copy {3, 11}
 import { useEffect, useState } from 'react';
 import { AuthToken, Dashboard } from 'semaphor';
 import '../node_modules/semaphor/dist/style.css'; // IMPORTANT! Include the CSS file. This is the default style, you can customize it.
@@ -68,7 +68,7 @@ function App() {
 
 Here is the complete React code that uses the above steps. You can copy and paste this example into your own application.
 
-```tsx copy
+```tsx {3-7, 31, 43} copy filename="App.tsx"
 import { useEffect, useState } from 'react';
 import { AuthToken, Dashboard } from 'semaphor';
 import '../node_modules/semaphor/dist/style.css'; // IMPORTANT! Include the CSS file. This is the default style, you can customize it.

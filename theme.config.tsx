@@ -3,6 +3,16 @@ import { DocsThemeConfig } from 'nextra-theme-docs';
 import Logo from './logo';
 
 const config: DocsThemeConfig = {
+  head: (
+    <>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta property="og:title" content="Semaphor" />
+      <meta
+        property="og:description"
+        content="Infuse data signals into your apps"
+      />
+    </>
+  ),
   logo: (
     <span>
       <Logo />
