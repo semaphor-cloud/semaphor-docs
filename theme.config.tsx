@@ -36,6 +36,17 @@ const config: DocsThemeConfig = {
       </>
     );
   },
+  useNextSeoProps() {
+    const { frontMatter } = useConfig();
+
+    const { asPath } = useRouter()
+
+    if (asPath !== '/') {
+        return {
+            titleTemplate: '%s - Semaphor',
+        }
+    }
+  },
   logo: (
     <span>
       <Logo />
