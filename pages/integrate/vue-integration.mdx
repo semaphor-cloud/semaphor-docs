@@ -1,0 +1,159 @@
+## **Vue Integration**
+
+Integrating dashboard into your Vue app is a three-step process.
+
+### **1) Setup**
+
+**a)** Create a new Vue app with Vite. See the official Vite [documentation](https://vitejs.dev/guide/#scaffolding-your-first-vite-project) for more details.
+
+```markdown copy
+npm create vite@latest vue-semaphor-app -- --template vue-ts
+```
+
+```markdown copy
+cd vue-semaphor-app; npm install
+```
+
+**b)** Install `semaphor` package along with `react` and `react-dom` as dependencies.
+
+```markdown copy
+npm i semaphor@latest react react-dom
+```
+
+**c)** Install Vite plugin for react and types as dev dependencies.
+
+```markdown copy
+npm install @vitejs/plugin-react --save-dev @types/react @types/react-dom --save-dev
+```
+
+**d)** Now open the app in your code editor and update the Vite.config with react plugin.
+
+```ts copy filename="./vite.config.ts"
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [vue(), react()],
+});
+```
+
+**e)** Open your terminal window and start the app
+
+```markdown copy
+npm run dev
+```
+
+At this point, you should have the boilerplate Vite app running at http://localhost:5173.
+
+### **2) Sempahor Component**
+
+To render Semaphor dashboard in your app, create the following components in the `src/components` directory
+
+```tsx {3-7} copy filename="src/components/sempahor-dashboard.tsx"
+import { useEffect, useState } from 'react';
+import { AuthToken, Dashboard } from 'semaphor';
+import '../../node_modules/semaphor/dist/style.css'; // IMPORTANT! Include the CSS file. This is the default style, you can customize it.
+
+const DASHBOARD_ID = 'd_cf007a8b-19bc-46ad-8787-2915445b7b86'; // Replace with your actual dashboard ID
+const DASHBOARD_SECRET = 'ds_f32f0b30-b7e1-40f9-ba6a-9804a5b9d635'; // Replace with your actual dashboard secret
+const TOKEN_URL = 'https://semaphor.cloud/api/v1/token';
+
+export function SemaphorDashboard() {
+  const [authToken, setAuthToken] = useState<AuthToken>();
+
+  useEffect(() => {
+    // Keep the DASHBOARD_SECRET secure and do not expose it in client-side code in production.
+    // For production, obtain the authentication token from a secure, server-side environment.
+    // This example is for demonstration purposes only.
+    async function fetchToken() {
+      try {
+        const response = await fetch(TOKEN_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            dashboardId: DASHBOARD_ID,
+            dashboardSecret: DASHBOARD_SECRET,
+          }),
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const token = await response.json();
+        if (token?.accessToken) {
+          setAuthToken(token);
+        }
+      } catch (error) {
+        console.error('There was an error!', error);
+      }
+    }
+    fetchToken();
+  }, []);
+
+  return (
+    <div>
+      <h2>My Vue dashboard</h2>
+      <Dashboard authToken={authToken} id={DASHBOARD_ID} />
+    </div>
+  );
+}
+```
+
+From Vue's perspective `SemaphorDashbaord` is a JavaScript function. The `Connector` component allows your Vue app to communicate with the dashboard.
+
+```tsx copy filename="src/component/connector.tsx"
+import { SemaphorDashboard } from './semaphor-dashboard';
+import { Root, createRoot } from 'react-dom/client';
+
+export class ReactConnector {
+  root: Root;
+
+  constructor(targetEl: HTMLElement) {
+    this.root = createRoot(targetEl);
+  }
+
+  render() {
+    this.root.render(<SemaphorDashboard />);
+  }
+}
+```
+
+### **3) Render in your app**
+
+First, uncomment the boilerplate styles in `main.ts` like shown below.
+
+```ts filename="src/main.ts"
+import { createApp } from 'vue';
+// import './style.css'
+import App from './App.vue';
+
+createApp(App).mount('#app');
+```
+
+Now navigate to your `App.vue` file and replace the content with the following code.
+
+```vue copy filename="src/App.vue"
+<script setup lang="ts">
+import { onMounted } from 'vue';
+import { ReactConnector } from './components/connector';
+
+onMounted(() => {
+  const reactComponent = new ReactConnector(
+    document.getElementById('semaphor-container')!
+  );
+  reactComponent.render();
+});
+</script>
+
+<template>
+  <div id="semaphor-container"></div>
+</template>
+```
+
+### **Key Considerations**
+
+- **Security Note:** Keep the `DASHBOARD_SECRET` secure and do not expose it in client-side code in production. This example is for demonstration purposes only. When deploying in production, obtain the authentication token from a secure, server-side environment.
+- **Fetching the AuthToken:** Before the dashboard can be displayed, an authentication token must be fetched. The `useEffect` hook is used to perform this action when the component mounts.
