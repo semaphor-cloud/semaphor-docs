@@ -1,4 +1,4 @@
-## **Web Component**
+## Web Component
 
 This example is based on the assumption that you are working with vanilla JavaScript in an HTML environment. It involves a script that fetches the token and passes it to the `auth-token` attribute once the token is retrieved.
 
@@ -20,7 +20,9 @@ npm install
 npm run dev
 ```
 
-### **1) Install Semaphor Package**
+---
+
+### 1) Install Semaphor Package
 
 After running the above commands, open the project in your editor and install the `semaphor` package.
 
@@ -28,7 +30,9 @@ After running the above commands, open the project in your editor and install th
 npm i semaphor
 ```
 
-### **2) Get Auth Token**
+---
+
+### 2) Get Auth Token
 
 Create a `dashboard.js` file at the root of your project and paste the following code. This code retrieves the `AuthToken`, which is necessary for the dashboard to render.
 
@@ -86,7 +90,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 ```
 
-### **3) Use Web Component**
+---
+
+### 3) Use Web Component
 
 And finally, let's add the following three lines to the `index.html` file as below:
 
@@ -114,11 +120,13 @@ And finally, let's add the following three lines to the `index.html` file as bel
 
 That's all. Type the following command in your terminal window to run the app.
 
-``` markdown copy
- npm run dev
+```markdown copy
+npm run dev
 ```
 
-### **Key Considerations**
+---
+
+### Key Considerations
 
 - **Security:** Embedding secrets directly in your frontend code is not recommended. This example is for illustration purposes only, and assumes the `DASHBOARD_SECRET` is safe to expose (public dashboards), but, secrets should not be accessible on the client side. You might need a server-side solution to handle authentication securely.
 - **Error Handling**: The code includes basic error handling for the fetch call and element selection. Depending on your application's complexity and requirements, you might want to implement more sophisticated error handling.

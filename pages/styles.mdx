@@ -1,4 +1,4 @@
-## **Themes & Styles**
+## Themes & Styles
 
 You can personalize the styles, colors, and fonts of your dashboard using the **`style`** property of the component.
 
@@ -6,7 +6,7 @@ You can personalize the styles, colors, and fonts of your dashboard using the **
 <Dashboard id={DASHBOARD_ID} authToken={authToken} style={customStyle} />
 ```
 
-### **Bring your own CSS**
+### Bring your own CSS
 
 You can use CSS classes to precisely customize the appearance of your dashboard. You also have the option to use [Tailwindcss](https://tailwindcss.com/). You can find class annotations by looking at the `role` attribute of your DOM elements. These annotations are useful for targeting your CSS classes. For instance, the `dashboard-panel` class can be extended using the `dashboardPanel` property in the styles object provided below.
 
@@ -170,7 +170,9 @@ export const DEFAULT_STYLE: TStyle = {
 };
 ```
 
-### **Chart Options**
+---
+
+### Chart Options
 
 Semaphore uses [Chart.js](https://www.chartjs.org/docs/latest/samples/bar/border-radius.html) for data visualization, offering complete flexibility to customize every aspect of your chart. You can override the **`options`** property of the chart and set global properties for your dashboard. Alternatively, you can customize individual cards when creating the dashboard. The properties set for individual cards are more specific and override the global properties.
 
