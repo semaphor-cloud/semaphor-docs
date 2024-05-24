@@ -8,7 +8,7 @@ The **On-click** filter is activated when a user clicks on an element in a chart
 
 The **Top-Level filters**, as the name suggests, are located at the top of the dashboard. They are best suited for continuous data types, such as dates and numbers.
 
-You can set up a filter subscription on the card query using the handle-bar syntax `{{ }}`. Currently, we offer two filter functions, `{{ filters | where }}` and `{{ filters | and }}` as a shorthand for the `WHERE` and `AND` clauses, respectively.
+You can set up a filter subscription on the card query using the handlebar syntax `{{ }}`. Currently, we offer two filter functions, `{{ filters | where }}` and `{{ filters | and }}` as a shorthand for the `WHERE` and `AND` clauses, respectively.
 
 As an example, the query below represents a card SQL which counts orders by cities.
 
@@ -99,7 +99,7 @@ ORDER BY city DESC LIMIT 50
 
 Now, when the user fitlers by `discount` the card query resolves as below:
 
-```sql {2} filename="Card SQL"
+```sql {2} filename="Filter SQL"
 SELECT city, COUNT(*) FROM sales_data
 WHERE discount > 0.2
 GROUP BY city
@@ -111,9 +111,8 @@ Note how this query ignores other `segment` and `city` columns.
 
 When doing joins, you may need to pass in the appropriate table aliases for specific fields. Here's how you can do that:
 
-```sql
-SELECT city, COUNT(*)
-FROM sales_data
+```sql {2} filename="Card SQL"
+SELECT city, COUNT(*) FROM sales_data
 {{ filters['discount'] | where('>', table_alias='c') }}
 GROUP BY city
 ORDER BY city DESC LIMIT 50
@@ -152,6 +151,12 @@ ORDER BY city DESC LIMIT 50
 
 ---
 
+### Disable Filtering
+
+To prevent a card from filtering, specify `{{ no_filters }}` annotation in the card query. This will unsubscribe the card from the incoming filters.
+
+---
+
 ### API Filters
 
 When using an API connection, you can use the filters in the SQL query as described above. However, you can also use handlebar notation to pass query parameters or replace certain parts of the URL based on the user filters. For example, consider the following API where you want to fetch the status of a todo ID based on the filter value.
@@ -179,9 +184,3 @@ https://jsonplaceholder.typicode.com/todos/1
 ```
 
 Notice that `todos/1` is the default value.
-
----
-
-### Disable Filtering
-
-To prevent a card from filtering, specify `{{ no_filters }}` annotation in the card query. This will unsubscribe the card from the incoming filters.
