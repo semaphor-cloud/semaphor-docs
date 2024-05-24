@@ -152,6 +152,36 @@ ORDER BY city DESC LIMIT 50
 
 ---
 
+### API Filters
+
+You can also use the handle-bar notation to modify your API connection. For example, the below URL:
+
+```markdown filename="API Connection"
+https://jsonplaceholder.typicode.com/todos/{{ filters['id']['values'][0] }}
+```
+
+would resolve to
+
+```markdown filename="Filtered API"
+https://jsonplaceholder.typicode.com/todos/2
+```
+
+Now, if you want to provide a default value when no filter is present, you can use the following expression:
+
+```markdown filename="API Connection"
+https://jsonplaceholder.typicode.com/todos/{{ filters.get('id', {}).get('values', [1])[0] }}
+```
+
+This resolves to
+
+```markdown filename="Filtered API"
+https://jsonplaceholder.typicode.com/todos/1
+```
+
+Notice that `todos/1` is the default value.
+
+---
+
 ### Disable Filtering
 
 To prevent a card from filtering, specify `{{ no_filters }}` annotation in the card query. This will unsubscribe the card from the incoming filters.
