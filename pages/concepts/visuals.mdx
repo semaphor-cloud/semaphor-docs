@@ -1,0 +1,31 @@
+## Visualizing data
+
+### Stacked Chart
+
+```sql {2-4} filename="Stacked Chart SQL"
+SELECT
+  TO_CHAR(DATE_TRUNC('month', order_date), 'MM-YYYY') AS month, -- x-axis
+  category, -- stack-by
+  COUNT(*) AS number_of_orders -- y-axis (number)
+FROM
+  sales_data
+GROUP BY
+  month, category
+ORDER BY
+  month, category;
+
+```
+
+```markdown filename="Query Response"
+| Month   | Category        | Number of Orders |
+| ------- | --------------- | ---------------- |
+| 01-2020 | Furniture       | 22               |
+| 01-2020 | Office Supplies | 45               |
+| 01-2020 | Technology      | 22               |
+| 01-2021 | Furniture       | 24               |
+| 01-2021 | Office Supplies | 100              |
+| 01-2021 | Technology      | 31               |
+| 01-2022 | Furniture       | 15               |
+```
+
+![Chart](pages/concepts/visual_images/stacked_chart.png)
