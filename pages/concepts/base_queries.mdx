@@ -1,3 +1,13 @@
 ## Base Queries / Data Modeling
 
-Coming soon...
+The `base queries` serve as the top-level data model that you can reference in your card SQL. It promotes the reusability of SQL logic across all dashboard cards. They come handy in scenarios where you want to create multiple visualizations from the same underlying dataset. You can represent this dataset using a `base query` and reference it in all your dashboard cards as `{{ ref('base_query') }}`.
+
+import { Callout } from 'nextra/components'
+ 
+<Callout  emoji="⚠️">
+  All [filters](/concepts/filters) must be included in the `base query`. Filters outside of the `base query` may result in errors, as the column and table names might not be accessible.
+</Callout
+
+>
+
+You can create a `base query` from the explorer view as shown below.
