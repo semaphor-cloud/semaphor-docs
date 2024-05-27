@@ -1,8 +1,10 @@
 ## Visualizing data
 
-### Stacked Chart
+### Stacked Charts
 
-```sql {2-4} filename="Stacked Chart SQL"
+You can generate a stacked `line`, `bar`, or `area` chart using the following query structure. Notice the column in the `SELECT` clause . The first column is mapped to the `x-axis`, the second column values form a `stack`, and the third column represents a `metric` (a number).
+
+```sql {2-4} filename="PostgreSQL"
 SELECT
   TO_CHAR(DATE_TRUNC('month', order_date), 'MM-YYYY') AS month, -- x-axis
   category, -- stack-by
@@ -16,6 +18,8 @@ ORDER BY
 
 ```
 
+#### Stacked Bar
+
 ```markdown filename="Query Response"
 | Month   | Category        | Number of Orders |
 | ------- | --------------- | ---------------- |
@@ -28,4 +32,73 @@ ORDER BY
 | 01-2022 | Furniture       | 15               |
 ```
 
-![Chart](pages/concepts/visual_images/stacked_chart.png)
+![Chart](pages/concepts/visual_images/stacked_bar.png)
+
+#### Stacked Line
+
+You can convert the above chart into a `stacked line` chart by modifying the `dataset type` in the config as highlighted below.
+
+```json {3, 10, 17 } filename="Chart Config"
+ "datasets": [
+   {
+    "type": "line",
+    "label": "Furniture",
+    "data": [],
+    "backgroundColor": "#3b82f6",
+    "borderColor": "#3b82f6"
+   },
+   {
+    "type": "line",
+    "label": "Office Supplies",
+    "data": [],
+    "backgroundColor": "#14b8a6",
+    "borderColor": "#14b8a6"
+   },
+   {
+    "type": "line",
+    "label": "Technology",
+    "data": [],
+    "backgroundColor": "#f59e0b",
+    "borderColor": "#f59e0b"
+   }
+  ]
+
+```
+
+![Chart](pages/concepts/visual_images/stacked_line.png)
+
+#### Stacked Area
+
+You can convert the above chart into an `area` chart by providing the `fill` property as highlighted below.
+
+```json {3-4,11-12,19-20} filename="Chart Config"
+"datasets": [
+   {
+    "type": "line",
+    "fill": "origin",
+    "label": "Furniture",
+    "data": [],
+    "backgroundColor": "#3b82f6",
+    "borderColor": "#3b82f6"
+   },
+   {
+    "type": "line",
+    "fill": "origin",
+    "label": "Office Supplies",
+    "data": [],
+    "backgroundColor": "#14b8a6",
+    "borderColor": "#14b8a6"
+   },
+   {
+    "type": "line",
+    "fill": "origin",
+    "label": "Technology",
+    "data": [],
+    "backgroundColor": "#f59e0b",
+    "borderColor": "#f59e0b"
+   }
+  ]
+
+```
+
+![Chart](pages/concepts/visual_images/stacked_area.png)
