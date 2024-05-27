@@ -5,9 +5,31 @@ The `base queries` serve as the top-level data model that you can reference in y
 import { Callout } from 'nextra/components'
  
 <Callout  emoji="⚠️">
-  All [filters](/concepts/filters) must be included in the `base query`. Filters outside of the `base query` may result in errors, as the column and table names might not be accessible.
+  The [filters](/concepts/filters) must be located within the same SQL block where the database tables are referenced. Filters placed outside could lead to errors. 
 </Callout
 
 >
 
-You can create a `base query` from the explorer view as shown below.
+You can create a `base query` from the card explorer as shown below.
+
+![Base Query](pages/concepts/base_query_images/base_query.png)
+
+In this example, we create a CTE (Common Table Txpresssion) and place our filter `{{ filters | and }}` as shown below. The `base query` represents the top-level data model that you want to visualize. This can be a single table or a result of join between multiple tables.
+
+```sql {3} filename="Base Query"
+WITH subquery AS
+    ( SELECT * FROM sales_data
+      WHERE segment = 'Consumer' {{ filters | and }}
+    )
+    select * from subquery
+```
+
+After defining the `base query`, you can reference it in your card SQL as shown below.
+
+```sql {2} filename="Card SQL"
+SELECT category, COUNT(*)
+FROM {{ ref('consumer_segment') }}
+GROUP BY category ORDER BY category DESC LIMIT 100
+```
+
+Notice that that card SQL does not have any filters. The filters must be passed to the base query where tables are referenced.
