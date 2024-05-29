@@ -1,10 +1,10 @@
 ## Visualizing data
 
-### Bar Chart
+### Bar / Line Charts
 
-You can create a bar chart using a simple `GROUP BY` clause. The first column of the query corresponds to the x-axis, while the second column (number) corresponds to the y-axis.
+You can create a `bar` or a `line` chart using a simple `GROUP BY` clause. The first column of the query corresponds to the x-axis, while the second column (number) corresponds to the y-axis.
 
-```sql {1-2} filename="Card SQL (PostgreSQL)"
+```sql {1-2} filename="Card SQL"
 SELECT sub_category, -- x-axis
 COUNT(*) -- y-axis (number)
 FROM sales_data
@@ -13,7 +13,7 @@ ORDER BY sub_category DESC LIMIT 100
 
 ```
 
-```markdown filename="Query Result"
+```markdown filename="Results"
 | sub_category | count |
 | ------------ | ----- |
 | Tables       | 319   |
@@ -27,9 +27,9 @@ ORDER BY sub_category DESC LIMIT 100
 
 ![Chart](pages/concepts/visual_images/bar_chart.png)
 
-#### Multi-variate bar chart
+#### Multivariate Bar
 
-To create a multivariate bar chart, you could add another aggregate metric, such as Avg_Sales, to the above query.
+To create a multivariate bar chart, you could add another aggregate metric, such as Avg_Sales, to the above query. You can add as many metrics you would like.
 
 ```sql {3} filename="Card SQL"
 SELECT sub_category,
@@ -40,7 +40,7 @@ GROUP BY sub_category
 ORDER BY sub_category DESC LIMIT 100
 ```
 
-```markdown filename="Query Result"
+```markdown filename="Results"
 | Sub Category | Count | Avg_Sales |
 | ------------ | ----- | --------- |
 | Tables       | 319   | 648.80    |
@@ -55,11 +55,11 @@ ORDER BY sub_category DESC LIMIT 100
 
 ![Chart](pages/concepts/visual_images/multi-variate_bar_chart.png)
 
-#### Combo chart
+#### Combo Chart
 
 You can also change any of the dataset in the chart config to a `line` type to create a combo chart.
 
-```json {9} filename='Chart Config"
+```json {9} filename="Chart Config"
 "datasets": [
    {
     "label": "Count",
@@ -83,7 +83,7 @@ You can also change any of the dataset in the chart config to a `line` type to c
 
 You can generate a stacked `line`, `bar`, or `area` chart using the following query structure. Notice the column in the `SELECT` clause . The first column is mapped to the `x-axis`, the second column values form a `stack`, and the third column represents a `metric` (a number).
 
-```sql {2-4} filename="Card SQL (PostgreSQL)"
+```sql {2-4} filename="Card SQL"
 SELECT
   TO_CHAR(DATE_TRUNC('month', order_date), 'MM-YYYY') AS month, -- x-axis
   category, -- stack-by
@@ -99,7 +99,7 @@ ORDER BY
 
 #### Stacked Bar
 
-```markdown filename="Query Result"
+```markdown filename="Results"
 | Month   | Category        | Number of Orders |
 | ------- | --------------- | ---------------- |
 | 01-2020 | Furniture       | 22               |
