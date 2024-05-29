@@ -1,6 +1,6 @@
 {
   "visuals": "Visuals",
-  "base_queries": "Base Queries",
+  "models": "Base Queries",
   "filters": "Filters",
   "security": "Security & Multi-Tenancy"
 }
