@@ -1,6 +1,8 @@
 ## Visualizing data
 
-### Bar / Line Charts
+Semaphor uses the open-source ChartJS 4 [specification](https://www.chartjs.org/docs/latest/samples/information.html) for its visuals. You can access the full ChartJS API to customize the look and feel of your charts. Here are some examples of how to quickly create common charts using simple SQL queries.
+
+### Bar / Line / Area Charts
 
 You can create a `bar` or a `line` chart using a simple `GROUP BY` clause. The first column of the query corresponds to the x-axis, while the second column (number) corresponds to the y-axis.
 
@@ -32,9 +34,9 @@ ORDER BY sub_category DESC LIMIT 100
 To create a multivariate bar chart, you could add another aggregate metric, such as Avg_Sales, to the above query. You can add as many metrics you would like.
 
 ```sql {3} filename="Card SQL"
-SELECT sub_category,
-COUNT(*),
-AVG(sales) as AVG_sales
+SELECT sub_category, -- x-axis
+COUNT(*), -- y-axis-1
+AVG(sales) as AVG_sales -- y
 FROM sales_data
 GROUP BY sub_category
 ORDER BY sub_category DESC LIMIT 100
@@ -78,6 +80,34 @@ You can also change any of the dataset in the chart config to a `line` type to c
 ```
 
 ![Chart](pages/concepts/visual_images/combo_chart.png)
+
+#### Area Chart
+
+To create an area chart, add the `type: line` and `fill: origin` properties to the chart configuration. For more detailed customization, refer to the Chartjs [docs](https://www.chartjs.org/docs/latest/charts/area.html).
+
+```json {3-4, 11-12}  filename="Chart Config"
+"datasets": [
+   {
+    "type": "line",
+    "fill": "origin",
+    "label": "Count",
+    "data": [],
+    "backgroundColor": "#3b82f6",
+    "borderColor": "#3b82f6"
+   },
+   {
+    "type": "line",
+    "fill": "origin",
+    "label": "Avg_sales",
+    "data": [],
+    "backgroundColor": "#14b8a6",
+    "borderColor": "#14b8a6"
+   }
+  ]
+
+```
+
+![Chart](pages/concepts/visual_images/area_chart.png)
 
 ### Stacked Charts
 
@@ -181,3 +211,26 @@ You can convert the above chart into an `area` chart by providing the `fill` pro
 ```
 
 ![Chart](pages/concepts/visual_images/stacked_area.png)
+
+### Pie / Donut / Polar Charts
+
+You can create a pie chart, donut chart, or polar chart using the same SQL syntax.
+
+```sql filename="Card SQL"
+SELECT ship_mode, -- label
+COUNT(*) -- measure
+FROM sales_data
+GROUP BY ship_mode ORDER BY ship_mode
+DESC LIMIT 100
+```
+
+```markdown filename="Results"
+| Ship Mode      | Count |
+| -------------- | ----- |
+| Standard Class | 5968  |
+| Second Class   | 1945  |
+| Same Day       | 543   |
+| First Class    | 1538  |
+```
+
+![Chart](pages/concepts/visual_images/pie_donut_polar_chart.png)
