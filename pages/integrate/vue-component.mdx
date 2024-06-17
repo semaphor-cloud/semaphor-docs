@@ -1,0 +1,134 @@
+## Vue Component
+
+This guide offers step-by-step instructions on how to integrate the Semaphor dashboard into your Vue app. We're assuming that you already have a React Vue set up. If not, you can follow the instructions [here](https://vitejs.dev/guide/#scaffolding-your-first-vite-project) to bootstrap your Vue app.
+
+### 1) Install Semaphor Package
+
+Open your terminal in your project directory and run the following command. This command installs the `semaphor` package and adds it to your project dependencies.
+
+```markdown copy
+npm i vue-semaphor
+```
+
+---
+
+### 2) Get Auth Token
+
+Before rendering the `Dashboard`, first acquire the `AuthToken`.Make a POST fetch call as shown below.
+
+```vue copy
+<script setup lang="ts">
+import { ref } from 'vue';
+import { Dashboard } from 'vue-semaphor';
+import type { AuthToken } from 'vue-semaphor';
+
+const DASHBOARD_ID = 'd_cf007a8b-19bc-46ad-8787-2915445b7b86'; // Replace with your actual dashboard id
+const DASHBOARD_SECRET = 'ds_f32f0b30-b7e1-40f9-ba6a-9804a5b9d635'; // Replace with your actual dashboard secret
+const TOKEN_URL = 'https://semaphor.cloud/api/v1/token';
+import 'vue-semaphor/dist/style.css'; // IMPORTANT! Include the CSS file. This is the default style, you can customize it.
+
+const token = ref<AuthToken | null>(null);
+
+async function fetchToken() {
+  try {
+    const response = await fetch(TOKEN_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dashboardId: DASHBOARD_ID,
+        dashboardSecret: DASHBOARD_SECRET,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const tk = await response.json();
+    if (tk?.accessToken) {
+      token.value = tk;
+      //console.log('token', token.value);
+    }
+  } catch (error) {
+    console.error('There was an error!', error);
+  }
+}
+fetchToken();
+</script>
+```
+
+---
+
+### 3) Initialize Dashboard
+
+Here is a simple example of a React component that demonstrates how to use the `Dashboard` component from the `semaphor` package. Make sure you import style.css either at the beginning of your component or in your global CSS file. This step is necessary for correctly loading your dashboard styles.
+
+```vue copy {3}
+<template>
+  <div v-if="!token">Loading...</div>
+  <Dashboard v-if="token" :token="token" :id="DASHBOARD_ID" />
+</template>
+```
+
+---
+
+### Full Code
+
+Here is the complete Vue code that uses the above steps. You can copy and paste this example into your own application.
+
+```vue {9} copy filename="App.vue"
+<script setup lang="ts">
+import { ref } from 'vue';
+import { Dashboard } from 'vue-semaphor';
+import type { AuthToken } from 'vue-semaphor';
+
+const DASHBOARD_ID = 'd_cf007a8b-19bc-46ad-8787-2915445b7b86';
+const DASHBOARD_SECRET = 'ds_f32f0b30-b7e1-40f9-ba6a-9804a5b9d635';
+const TOKEN_URL = 'https://semaphor.cloud/api/v1/token';
+import 'vue-semaphor/dist/style.css'; // IMPORTANT! Include the CSS file. This is the default style, you can customize it.
+
+const token = ref<AuthToken | null>(null);
+
+async function fetchToken() {
+  try {
+    const response = await fetch(TOKEN_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dashboardId: DASHBOARD_ID,
+        dashboardSecret: DASHBOARD_SECRET,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const tk = await response.json();
+    if (tk?.accessToken) {
+      token.value = tk;
+      //console.log('token', token.value);
+    }
+  } catch (error) {
+    console.error('There was an error!', error);
+  }
+}
+fetchToken();
+</script>
+
+<template>
+  <div v-if="!token">Loading...</div>
+  <Dashboard v-if="token" :token="token" :id="DASHBOARD_ID" />
+</template>
+
+<style scoped></style>
+```
+
+---
+
+### Key Considerations
+
+- **Security Note:** Keep the `DASHBOARD_SECRET` secure and do not expose it in client-side code in production. This example is for demonstration purposes only. When deploying in production, obtain the authentication token from a secure, server-side environment.
+- **Fetching the AuthToken:** Before the dashboard can be displayed, an authentication token must be fetched. The `useEffect` hook is used to perform this action when the component mounts.

@@ -1,5 +1,5 @@
 {
-  "react-component": "React",
-  "vue-integration": "Vue",
+  "react-component": "React Component",
+  "vue-component": "Vue Component",
   "web-component": "Web Component"
 }
