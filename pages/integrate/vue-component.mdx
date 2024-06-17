@@ -4,7 +4,7 @@ This guide offers step-by-step instructions on how to integrate the Semaphor das
 
 ### 1) Install Semaphor Package
 
-Open your terminal in your project directory and run the following command. This command installs the `semaphor` package and adds it to your project dependencies.
+Open your terminal in your project directory and run the following command. This command installs the `vue-semaphor` package and adds it to your project dependencies.
 
 ```markdown copy
 npm i vue-semaphor
@@ -131,4 +131,3 @@ fetchToken();
 ### Key Considerations
 
 - **Security Note:** Keep the `DASHBOARD_SECRET` secure and do not expose it in client-side code in production. This example is for demonstration purposes only. When deploying in production, obtain the authentication token from a secure, server-side environment.
-- **Fetching the AuthToken:** Before the dashboard can be displayed, an authentication token must be fetched. The `useEffect` hook is used to perform this action when the component mounts.
