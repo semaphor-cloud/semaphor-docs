@@ -2,19 +2,19 @@ import { Tabs } from 'nextra/components';
 
 ## Security & Multi-tenancy
 
-Semaphor offers multiple options for securing and segmenting customer data based on the end user or the tenant. You can use `connection-level` security, `table-level` security, and also `row/column-level` security to precisely control what your users see when they access the dashboard.
+Semaphor offers multiple options for securing and segmenting customer data based on your tenant. You can use `connection-level`, `table-level`, and `row/column-level` security policies within Semaphor to precisely control what your users see when they log into your app.
 
 ### Connection-Level Security
 
-If you need strict data isolation for your clients based on dedicated databases or folders, you can use connection-level policies. With these polices, you can parameterize the parts of your database strings and file paths depending on the user accessing your app. This approach eliminates dashboard duplication and allows you to deliver the same dashboard to multiple clients in a secure manner.
+Connection-level policies provide strict data isolation between your tenants by connecting to dedicated databases or folders at run time. With connection-level polices, you can parameterize parts of your database strings and file paths depending on the requesting tenant. This approach eliminates dashboard duplication, and allows you to deliver the same dashboard to multiple clients in a secure manner.
 
-The way this works is, when a user is authenticated by your app, based on their access rules, you pass in the appropriate `parameter` for the policy along with your `dashboard id` and `secret` to request the auth token. Semaphor then uses the `connection-level policy` and the `parameter`, and generates a `token` which can only be used to display the data authorized to that user.
+Here is how it works: When a user is authenticated by your app, based on the user's tenancy and profile, you pass in the appropriate `parameter` along with your `dashboard id` and `secret`. Semaphor then uses the `connection-level policy` and the `parameter`, and generates an auth token that can only be used to access the data authorized to that user.
 
 <Tabs items={['Files (S3)', 'Databases']} defaultIndex="0">
   <Tabs.Tab>
-In Semaphor, you can directly visualize `.csv` or `.parquet` files in Amazon S3. Refer to the [S3 connection](http://docs.semaphor.cloud/connections#amazon-s3) section for instructions. Once the connection is established, you can set up a connection policy in your project that defines how to modify the connection based on the app user. The policy defines the parameters you must pass while requesting the token so Semphor can switch the connection at run time.
+In Semaphor, you can visualize `.csv` or `.parquet` files from Amazon S3. Refer to the [S3 connection](http://docs.semaphor.cloud/connections#amazon-s3) section for instructions. After establishing the connection, set up a connection policy in your project. This policy defines the parameters to adjust the file path based on the tenant.
 
-A common pattern is a folder-based segmentation, where you store data for each client in their respecive folders. In this example, we are storing data for each tenant in their dedicated prefixes (tenant_a, tenant_b, ..) as shown below:
+A common pattern here is folder-based tenant segmentation, where the data for each client is stored in dedicated folders. In this example, we store data for each tenant in their respective prefixes (tenant_a, tenant_b, etc.) as shown below:
 
 ```
 s3://semaphor-private/store/tenant_a/sales.parquet
@@ -24,7 +24,7 @@ s3://semaphor-private/store/tenant_n/sales.parquet
 
 ```
 
-In this scenario, you can create a connection policy with a `tenant` parameter. You can also have more than one parameter within the policy.
+To switch the file path based on the tenant, you can create a policy with a `tenant` parameter. You can also have more than one parameter within the policy.
 
 `s3://semaphor-private/store/{{ tenant }}/sales.parquet`
 
@@ -32,7 +32,7 @@ In this scenario, you can create a connection policy with a `tenant` parameter. 
 
 </Tabs.Tab>
  <Tabs.Tab>
-In Semaphor, you can connect to any SQL compatible databases. Refer to the [connection section](https://docs.semaphor.cloud/connections) for instructions. Once the connection is established, you can set up a connection policy in your project that defines how to modify the database connection based on the app user. This policy defines the parameters you must pass while requesting the token so Semphor can switch the db connection string at run time.
+In Semaphor, you can connect to any SQL compatible databases. Refer to the [connection section](https://docs.semaphor.cloud/connections) for instructions. After establishing the connection, you can set up a connection policy in your project that defines how to modify the database connection based on the tenant. To apply this policy to the dashboard, you need to provide the values for the parameters when requesting the auth token.
 
 A common pattern would be a seperate database for each client or for a set of clients, like so:
 
@@ -53,7 +53,7 @@ For this setup, you can create a connection policy with a tenant parameter. You 
   
 </Tabs>
 
-Once you have created this connection policy, you can use like below it to generate a specific token when a user requests the dashboard. Make sure to do this step on the server side.
+Now you can apply this policy to your dashboard. When you authenticate the user, based on their tenacy and profile, you can consturct a connection policy object as shown below. Pass this along with the dashboard ID and secret to the token API. Remember to perform this step on the server side.
 
 ```ts {5-10, 22} filename="server-side.ts"
 // Do the server side user authentication above and resolve the tenant param
@@ -99,17 +99,17 @@ fetchToken();
 
 ### Row/Column-Level Security
 
-If you need to logically segment your database or files for each of your customers or tenants, consider using row/column-level policies. These are particularly useful when all customer data resides in a single database. Row-level security can filter rows applicable to the currently logged-in user or tenant.
+Row/Column-Level policies are particularly useful when all customer data resides in a single database table or a set of files that you need to logically segment based on the tenant. These policies act like row filters or `WHERE` clauses on your tables.
 
-Here's how it works: When a user is authenticated by your app, depending on their tenant profile, you pass the appropriate `parameter` for the policy, along with your `dashboard id` and `secret`, to request an auth token. Semaphor then uses the `row-level policy` and the `parameter` to generate a `token` that can only display the data authorized for that user.
+Here's how it works: When a user is authenticated by your app, depending on their tenancy and profile, you pass the appropriate `parameter` for that policy, along with your `dashboard id` and `secret`. Semaphor then uses the `row-level policy` and the `parameter` to generate a `token` that can only be used to access data authorized for that user.
 
-The screenshot below defines the row/column-level policy. This policy expects the `state` parameter in the SQL expression. It allows access to all columns except `discount`.
+The screenshot below defines the row/column-level policy. This policy expects the `state` parameter in the SQL expression. It allows access to all columns except the `discount` column.
 
 `state in {{ state }}`
 
 ![rcls](pages/concepts/security_images/rcls.png)
 
-After authenticating the user, you can pass in value depending on the user's profile.
+After authenticating the user, you can pass in the `state` values depending on the user's profile.
 
 ```ts {5-10, 22} filename="server-side.ts"
 // Do the server side user authentication above and resolve the `state` parameter.
