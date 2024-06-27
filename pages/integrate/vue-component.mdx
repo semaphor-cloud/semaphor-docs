@@ -70,7 +70,7 @@ async function fetchToken() {
 
 ### Full Code
 
-Here is the complete Vue code that uses the above steps. You can copy and paste this example into your own application.
+Here is the complete example that you can copy and paste into your own application.
 
 <Tabs items={['Vue 3', 'Vue 2', 'Web Component']}>
 <Tabs.Tab>
@@ -231,7 +231,13 @@ export default {
 </Tabs.Tab>
 <Tabs.Tab>
 
-If you wish, you can also use the Web Component directly inside of your Vue project. To do that, first create a wrapper component like shown below and then import that regular component inside of your Vue project.
+If you wish, you can also use the Web Component directly inside of your Vue project. To do that, first get the `semaphor` package.
+
+```markdown copy
+npm i semaphor
+```
+
+Create a wrapper component as shown below and then import that as a regular Vue component inside of your project.
 
 ```vue copy filename="dashboard.vue"
 <script lang="ts">
