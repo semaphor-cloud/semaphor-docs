@@ -72,7 +72,7 @@ async function fetchToken() {
 
 Here is the complete Vue code that uses the above steps. You can copy and paste this example into your own application.
 
-<Tabs items={['Vue 3', 'Vue 2']}>
+<Tabs items={['Vue 3', 'Vue 2', 'Web Component']}>
 <Tabs.Tab>
 
 ```vue {4} filename="App.vue" copy
@@ -229,8 +229,68 @@ export default {
 ```
 
 </Tabs.Tab>
-<Tabs.Tab>**npm** is a package manager for the JavaScript programming language.</Tabs.Tab>
-<Tabs.Tab>**Yarn** is a software packaging system.</Tabs.Tab>
+<Tabs.Tab>
+
+If you wish, you can also use the Web Component directly inside of your Vue project. To do that, first create a wrapper component like shown below and then import that regular component inside of your Vue project.
+
+```vue copy filename="dashboard.vue"
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
+import { AuthToken, DashboardWC, Theme, TStyle } from 'semaphor';
+
+// Define the custom element globally
+if (!customElements.get('semaphor-dashboard')) {
+  customElements.define('semaphor-dashboard', DashboardWC);
+}
+
+export default defineComponent({
+  name: 'Dashboard',
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+    token: {
+      type: Object as PropType<AuthToken>,
+      required: true,
+    },
+    currentTheme: {
+      type: String as PropType<Theme>,
+      required: false,
+    },
+    customStyle: {
+      type: Object as PropType<TStyle>,
+      required: false,
+    },
+    onEvent: {
+      type: Function as PropType<Function>,
+      default: () => {},
+      required: false,
+    },
+  },
+
+  beforeMount() {
+    // Register the onEvent callback on the window object if it exists. The function name must correspond to the call back name in the code.
+    const onEventFunctionName: string = this.onEvent?.name || 'onEvent';
+    (window as any)[onEventFunctionName] = this.onEvent;
+    // }
+  },
+});
+</script>
+
+<template>
+  <semaphor-dashboard
+    :authToken.prop="token"
+    :id.prop="id"
+    :currentTheme.prop="currentTheme"
+    :customStyle.prop="customStyle"
+    :onEvent.prop="onEvent"
+  />
+</template>
+```
+
+</Tabs.Tab>
+
 </Tabs>
 
 ### Full Code (Nuxt)
