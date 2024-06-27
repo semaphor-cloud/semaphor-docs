@@ -8,7 +8,7 @@ Semaphor offers multiple options for securing and segmenting customer data based
 
 Connection-level policies provide strict data isolation between your tenants by connecting to dedicated databases or folders at run time. With connection-level polices, you can parameterize parts of your database strings and file paths depending on the requesting tenant. This approach eliminates dashboard duplication, and allows you to deliver the same dashboard to multiple clients in a secure manner.
 
-Here is how it works: When a user is authenticated by your app, based on the user's tenancy and profile, you pass in the appropriate `parameter` along with your `dashboard id` and `secret`. Semaphor then uses the `connection-level policy` and the `parameter`, and generates an auth token that can only be used to access the data authorized to that user.
+Here is how it works: When a user is authenticated by your app, based on the user's tenancy and profile, you pass in the appropriate `parameter` along with your `dashboard id` and `secret`. Semaphor then uses the this `parameter` to generate the auth token that can only access the data authorized to that user.
 
 <Tabs items={['Files (S3)', 'Databases']} defaultIndex="0">
   <Tabs.Tab>
@@ -53,7 +53,7 @@ For this setup, you can create a connection policy with a tenant parameter. You 
   
 </Tabs>
 
-Now you can apply this policy to your dashboard. When you authenticate the user, based on their tenacy and profile, you can consturct a connection policy object as shown below. Pass this along with the dashboard ID and secret to the token API. Remember to perform this step on the server side.
+Now you can apply this policy to your dashboard. When you authenticate the user on the server side, based on their tenacy and profile, you can consturct a connection policy object as shown below. Pass this object along with the dashboard ID and secret to the token API.
 
 ```ts {5-10, 22} filename="server-side.ts"
 // Do the server side user authentication above and resolve the tenant param
@@ -101,9 +101,9 @@ fetchToken();
 
 Row/Column-Level policies are particularly useful when all customer data resides in a single database table or a set of files that you need to logically segment based on the tenant. These policies act like row filters or `WHERE` clauses on your tables.
 
-Here's how it works: When a user is authenticated by your app, depending on their tenancy and profile, you pass the appropriate `parameter` for that policy, along with your `dashboard id` and `secret`. Semaphor then uses the `row-level policy` and the `parameter` to generate a `token` that can only be used to access data authorized for that user.
+Here's how it works: When a user is authenticated by your app, depending on their tenancy and profile, you pass the appropriate `parameter` for that policy, along with your `dashboard id` and `secret`. Semaphor then uses the `row-level policy` and the `parameter` to generate a `token` that is scoped to the data authorized for that user.
 
-The screenshot below defines the row/column-level policy. This policy expects the `state` parameter in the SQL expression. It allows access to all columns except the `discount` column.
+The screenshot below defines the row/column-level policy. This policy expects a `state` parameter in the SQL expression. Additionally, it denies the access to the `discount` column.
 
 `state in {{ state }}`
 
@@ -155,6 +155,7 @@ The SQL expresssion will be expanded as
 
 ```sql
 
-SELECT * FROM sales_data WHERE state in ('California', 'Nevada', 'Washington')
+SELECT [all columns except `discount`] FROM sales_data
+WHERE state in ('California', 'Nevada', 'Washington')
 
 ```
