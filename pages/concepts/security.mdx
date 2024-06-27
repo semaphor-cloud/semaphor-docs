@@ -101,7 +101,7 @@ fetchToken();
 
 Row/Column-Level policies are particularly useful when all customer data resides in a single database table or a set of files that you need to logically segment based on the tenant. These policies act like row filters or `WHERE` clauses on your tables.
 
-Here's how it works: When a user is authenticated by your app, depending on their tenancy and profile, you pass the appropriate `parameter` for that policy, along with your `dashboard id` and `secret`. Semaphor then uses the `row-level policy` and the `parameter` to generate a `token` that is scoped to the data authorized for that user.
+Here's how it works: When a user is authenticated by your app, depending on their tenancy and profile, you pass the appropriate `parameter` for that policy, along with your `dashboard id` and `secret`. Semaphor then uses the `parameter` to generate a `token` that is scoped to the data authorized for that user.
 
 The screenshot below defines the row/column-level policy. This policy expects a `state` parameter in the SQL expression. Additionally, it denies the access to the `discount` column.
 
