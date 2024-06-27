@@ -1,3 +1,100 @@
+import { Tabs } from 'nextra/components';
+
 ## Security & Multi-tenancy
+
+### Connection Level Security
+
+If you need strict data isolation for your clients based on dedicated databases or folders, you can use connection-level policies. With these polices, you can parameterize the parts of your database strings and file paths depending on the user accessing your app. This approach eliminates dashboard duplication and allows you to deliver the same dashboard to multiple clients in a secure manner.
+
+The way this works is, when a user is authenticated by your app, based on their access rules, you pass in the appropriate `parameter` for the policy along with your `dashboard id` and `secret` to request the auth token. Semaphor then uses the `connection policy` and the `parameter`, and generates a `token` which can only be used to display the data authorized to that user.
+
+<Tabs items={['Files (S3)', 'Databases']} defaultIndex="0">
+  <Tabs.Tab>
+In Semaphor, you can directly visualize `.csv` or `.parquet` files in Amazon S3. Refer to the [S3 connection](http://docs.semaphor.cloud/connections#amazon-s3) guide for instructions. Once the connection is established, you can set up a connection policy in your project that defines how to modify the connection based on the app user. The policy defines the parameters you must pass while requesting the token so Semphor can switch the connection at run time.
+
+A common pattern is a folder-based segmentation, where you store data for each client in their respecive folders. In this example, we are storing data for each tenant in their dedicated prefixes (tenant_a, tenant_b, ..) as shown below:
+
+```
+s3://semaphor-private/store/tenant_a/sales.parquet
+s3://semaphor-private/store/tenant_b/sales.parquet
+...
+s3://semaphor-private/store/tenant_n/sales.parquet
+
+```
+
+In this scenario, you can create a connection policy with a `tenant` parameter. You can also have more than one parameter within the policy.
+
+`s3://semaphor-private/store/{{ tenant }}/sales.parquet`
+
+![CLS](pages/concepts/security_images/cls_file.png)
+
+</Tabs.Tab>
+ <Tabs.Tab>
+In Semaphor, you can connect to any SQL compatible databases. Refer to the [connection section](https://docs.semaphor.cloud/connections) for instructions. Once the connection is established, you can set up a connection policy in your project that defines how to modify the database connection based on the app user. This policy defines the parameters you must pass while requesting the token so Semphor can switch the db connection string at run time.
+
+A common pattern would be a seperate database for each client or for a set of clients, like so:
+
+```
+postgresql+psycopg2://username:password@host:port/tenant_a
+postgresql+psycopg2://username:password@host:port/tenant_b
+...
+postgresql+psycopg2://username:password@host:port/tenant_n
+```
+
+For this setup, you can create a connection policy with a tenant parameter. You can also have more than one parameter within the policy.
+
+`postgresql+psycopg2://username:password@host:port/{{ tenant }}`
+
+![CLS](pages/concepts/security_images/cls_db.png)
+
+  </Tabs.Tab>
+  
+</Tabs>
+
+Once you have created this connection policy, you can use like below it to generate a specific token when a user requests the dashboard. Make sure to do this step on the server side.
+
+```ts {5-10, 22} filename="server-side.ts"
+// Do the server side user authentication above and resolve the tenant param
+
+const tenant = 'tenant_a'; // example
+
+const connection_policy = {
+  name: 'store_sales_primary',
+  params: {
+    tenant: tenant,
+  },
+};
+
+async function fetchToken() {
+  try {
+    const response = await fetch(TOKEN_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dashboardId: DASHBOARD_ID,
+        dashboardSecret: DASHBOARD_SECRET,
+        cls: tenant ? [connection_policy] : [],
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const token = await response.json();
+    if (token?.accessToken) {
+      setAuthToken(token);
+      console.log('Token:', token);
+    }
+  } catch (error) {
+    console.error('There was an error!', error);
+  }
+}
+
+fetchToken();
+```
+
+### Connection Level Security
 
 Coming soon...
