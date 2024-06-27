@@ -2,7 +2,7 @@ import { Tabs } from 'nextra/components';
 
 ## Security & Multi-tenancy
 
-Semaphor offers multiple options for securing and segmenting customer data based on the end user or the tenant. We provide connection-level security, table-level security, and also row/column-level security, giving you the flexibility to employ the security model that best suits your needs.
+Semaphor offers multiple options for securing and segmenting customer data based on the end user or the tenant. You can use connection-level security, table-level security, and also row/column-level security to precisely control what your users see when they access the dashboard.
 
 ### Connection-Level Security
 
@@ -97,7 +97,7 @@ async function fetchToken() {
 fetchToken();
 ```
 
-### Row-Level Security
+### Row/Column-Level Security
 
 If you need to logically segment your database or files for each of your customers or tenants, consider using row/column-level policies. These are particularly useful when all customer data resides in a single database. Row-level security can filter rows applicable to the currently logged-in user or tenant. Additionally, you can also allow or deny speciifc columns.
 
