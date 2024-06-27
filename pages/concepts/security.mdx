@@ -99,17 +99,17 @@ fetchToken();
 
 ### Row/Column-Level Security
 
-If you need to logically segment your database or files for each of your customers or tenants, consider using row/column-level policies. These are particularly useful when all customer data resides in a single database. Row-level security can filter rows applicable to the currently logged-in user or tenant. Additionally, you can also allow or deny speciifc columns.
+If you need to logically segment your database or files for each of your customers or tenants, consider using row/column-level policies. These are particularly useful when all customer data resides in a single database. Row-level security can filter rows applicable to the currently logged-in user or tenant.
 
 Here's how it works: When a user is authenticated by your app, depending on their tenant profile, you pass the appropriate `parameter` for the policy, along with your `dashboard id` and `secret`, to request an auth token. Semaphor then uses the `row-level policy` and the `parameter` to generate a `token` that can only display the data authorized for that user.
 
-The screenshot below defines the row/column-level policy. This policy expects the `value` parameter in the SQL expression.
+The screenshot below defines the row/column-level policy. This policy expects the `state` parameter in the SQL expression. It allows access to all columns except `discount`.
 
-`state in {{value}}`
+`state in {{ state }}`
 
 ![rcls](pages/concepts/security_images/rcls.png)
 
-Upon user authentication within your app, you can pass in a value depending on the user's profile.
+After authenticating the user, you can pass in value depending on the user's profile.
 
 ```ts {5-10, 22} filename="server-side.ts"
 // Do the server side user authentication above and resolve the `state` parameter.
@@ -149,4 +149,12 @@ async function fetchToken() {
 }
 
 fetchToken();
+```
+
+The SQL expresssion will be expanded as
+
+```sql
+
+SELECT * FROM sales_data WHERE state in ('California', 'Nevada', 'Washington')
+
 ```
