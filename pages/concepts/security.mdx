@@ -151,7 +151,7 @@ async function fetchToken() {
 fetchToken();
 ```
 
-The SQL expresssion will be expanded as
+The policy parameter will be exapnded to SQL expresssion like below.
 
 ```sql
 
@@ -159,3 +159,5 @@ SELECT [all columns except `discount`] FROM sales_data
 WHERE state in ('California', 'Nevada', 'Washington')
 
 ```
+
+You can use connection-level policies along with row/column-level policies when your data needs both physical and logical isolation.
