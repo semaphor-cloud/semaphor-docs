@@ -111,7 +111,7 @@ The screenshot below defines the row/column-level policy. This policy expects a 
 
 After authenticating the user, you can pass in the `state` values depending on the user's profile.
 
-```ts {5-10, 22} filename="server-side.ts"
+```ts {3-8, 20} filename="server-side.ts"
 // Do the server side user authentication above and resolve the `state` parameter.
 
 const rowPolicy = {
@@ -160,4 +160,4 @@ WHERE state in ('California', 'Nevada', 'Washington')
 
 ```
 
-You can use connection-level policies along with row/column-level policies when your data needs both physical and logical isolation.
+You can use `connection-level` policies along with `row/column-level` policies when your data needs both physical and logical isolation.
