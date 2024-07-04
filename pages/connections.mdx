@@ -1,16 +1,16 @@
 ## Connecting to your data
 
-Semaphore allows you to connect to a wide array of data sources, from databases and files to live APIs. If there's a custom data source you'd like to connect to, feel free to send a request to support@semaphor.cloud.
+Semaphor allows you to connect to a wide array of data sources, from databases and files to live APIs. If there's a custom data source you would like to connect to, feel free to send a request to support@semaphor.cloud.
 
 ### Amazon S3
 
-You can directly connect and analyze files in S3. Currently, we support `.parquet`, and `.csv` formats. In the example below, we're connecting to an S3 bucket `semaphor-dev`.
+Currently, we support `.parquet`, and `.csv` formats. The example below shows connecting to an S3 bucket `semaphor-dev`.
 
 The wildcard notation `files/**/*.parquet` instructs Semaphor to recursively retrieve all files in `/tenant` prefix that end with `.parquet`.
 
 ![Connection](pages/connection_images/s3_connection.png)
 
-In order for Semaphor to read data from your S3 bucket, you need to create a `Cross Account` [IAM role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user.html#roles-creatingrole-user-console) with the right `Trust Policy` and `Permission Policy`. Semaphor genrates the `Trust Policy` and `Permission Policy` that you can simply copy/paste into your IAM role.
+For Semaphor to read data from your S3 bucket, you need to create a `Cross Account` [IAM role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user.html#roles-creatingrole-user-console) with the right `Trust Policy` and the `Permission Policy`. Semaphor provides the `Trust Policy` and the `Permission Policy` that you can simply copy/paste into your IAM role.
 
 ```json filename="Trust Policy" copy
 {
@@ -45,7 +45,7 @@ In order for Semaphor to read data from your S3 bucket, you need to create a `Cr
 }
 ```
 
-Once the connection is successfully established, you can start analyzing your files using SQL.
+Once the connection is successfully established, you can start analyzing your files like tables using SQL.
 
 ```sql filename="Card SQL"
 SELECT * from s3
