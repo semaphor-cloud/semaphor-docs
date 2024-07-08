@@ -65,7 +65,7 @@ Semaphor allows you to connect to a wide array of data sources, from databases a
 
 Currently, we support `.parquet`, and `.csv` formats. The example below shows connecting to an S3 bucket `semaphor-dev`.
 
-The wildcard notation `files/**/*.parquet` instructs Semaphor to recursively retrieve all files in `/tenant` prefix that end with `.parquet`.
+The wildcard notation `**/*.parquet` instructs Semaphor to recursively retrieve all files in the root `/` prefix that end with `.parquet`.
 
 ![Connection](pages/connection_images/s3_connection.png)
 
