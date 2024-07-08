@@ -4,13 +4,34 @@ Semaphor allows you to connect to a wide array of data sources, from databases a
 
 ### Amazon S3
 
-Currently, we support `.parquet`, and `.csv` formats. The example below shows connecting to an S3 bucket `semaphor-dev`.
+#### Setting Up a Cross-Account IAM Role for Semaphor Access
 
-The wildcard notation `files/**/*.parquet` instructs Semaphor to recursively retrieve all files in `/tenant` prefix that end with `.parquet`.
+**1) Create a Cross-Account IAM Role**
 
-![Connection](pages/connection_images/s3_connection.png)
+- Create a `Cross-account IAM role`. Please see the [AWS docs](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user.html#roles-creatingrole-user-console) for instructions.
 
-For Semaphor to read data from your S3 bucket, you need to create a `Cross Account` [IAM role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user.html#roles-creatingrole-user-console) with the right `Trust Policy` and the `Permission Policy`. Semaphor provides the `Trust Policy` and the `Permission Policy` that you can simply copy/paste into your IAM role.
+**2) Assign Permissions to the IAM Role**
+
+- In the AWS Console, navigate to the IAM role's `Permissions` tab.
+- Assign a policy to the role that grants access to your S3 bucket. The resource in the policy should specify your S3 bucket.
+
+```json filename="Permission Policy" copy
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["s3:GetObject", "s3:ListBucket"],
+      "Resource": ["arn:aws:s3:::my-s3-bucket", "arn:aws:s3:::my-s3-bucket/*"]
+    }
+  ]
+}
+```
+
+**3) Define Trust Relationships**
+
+- Go to the `Trust relationships` tab of the IAM role.
+- Define a trust relationship that allows Semaphor to access your S3 bucket. You can copy and paste the trust relationship stub from the Semaphor console.
 
 ```json filename="Trust Policy" copy
 {
@@ -24,7 +45,7 @@ For Semaphor to read data from your S3 bucket, you need to create a `Cross Accou
       "Action": "sts:AssumeRole",
       "Condition": {
         "StringEquals": {
-          "sts:ExternalId": "your_project_id"
+          "sts:ExternalId": "my_project_id"
         }
       }
     }
@@ -32,18 +53,21 @@ For Semaphor to read data from your S3 bucket, you need to create a `Cross Accou
 }
 ```
 
-```json filename="Permission Policy" copy
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": ["s3:GetObject", "s3:ListBucket"],
-      "Resource": ["arn:aws:s3:::semaphor-dev", "arn:aws:s3:::semaphor-dev/*"]
-    }
-  ]
-}
-```
+**4) Use the Fully Qualified Role ARN**
+
+- After creating the role, use the fully qualified role ARN when setting up the connection in the Semaphor console. For example: `arn:aws:iam::756808986636:role/semaphor-access-role`.
+- Provide the `region` of your S3 bucket.
+
+**5) Verify the Connection**
+
+- Check the connection by clicking the ⚡️ button in the Semaphor console.
+  A green ✓ mark indicates that the connection is successful.
+
+Currently, we support `.parquet`, and `.csv` formats. The example below shows connecting to an S3 bucket `semaphor-dev`.
+
+The wildcard notation `files/**/*.parquet` instructs Semaphor to recursively retrieve all files in `/tenant` prefix that end with `.parquet`.
+
+![Connection](pages/connection_images/s3_connection.png)
 
 Once the connection is successfully established, you can start analyzing your files like tables using SQL.
 
