@@ -17,16 +17,16 @@ You can create a `base query` from the card explorer as shown below.
 In this example, we create a CTE (Common Table Txpresssion) and place our filter `{{ filters | and }}` as shown below. The `base query` represents the top-level data model that you want to visualize. This can be a single table or a result of join between multiple tables.
 
 ```sql {3} filename="Base Query"
-WITH subquery AS
+WITH consumer_segment AS
     ( SELECT * FROM sales_data
       WHERE segment = 'Consumer' {{ filters | and }}
     )
-    select * from subquery
+    select * from consumer_segment
 ```
 
 After defining the `base query`, you can reference it in your card SQL as shown below.
 
-```sql {2} filename="Card SQL"
+```sql {2} filename="Resolved Query"
 SELECT category, COUNT(*)
 FROM {{ ref('consumer_segment') }}
 GROUP BY category ORDER BY category DESC LIMIT 100
