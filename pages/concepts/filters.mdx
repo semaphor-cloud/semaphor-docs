@@ -31,7 +31,7 @@ ORDER BY city DESC LIMIT 50
 
 Notice that `{{ filters | where }}` function is replaced by a `WHERE` clause, which performs `AND` operation on the incoming `city` and `discount` filter values. You can use this filter when your card SQL **DOES NOT** already contain a `WHERE` clause.
 
-However, if your base query already contains a `WHERE` clause as shown below, you can use the `{{ filters | and }}` function to append the incoming filter values to the existing `WHERE` clause.
+However, if your query already contains a `WHERE` clause, you can use the `{{ filters | and }}` function to append the incoming filter values to the existing `WHERE` clause.
 
 ```sql {2} filename="Card SQL"
 SELECT city, COUNT(*) FROM sales_data
@@ -41,7 +41,7 @@ ORDER BY city DESC LIMIT 50
 
 ```
 
-When the user selects 20% `discount` from the top-level filter, the card SQL resolves as following:
+Now, when the user selects `20%` `discount` from the top-level filter, the query resolves as the following:
 
 ```sql {2} filename="Resolved Query"
 SELECT city, COUNT(*) FROM sales_data
@@ -51,9 +51,9 @@ ORDER BY city DESC LIMIT 50
 
 ```
 
-Note that the `discount` filter value is appended to the existing `WHERE` clause.
+Note that the `discount` field is appended to the existing `WHERE` clause.
 
-Internally, Semaphor represents the filter array as shown below. You can view the active filters by clicking on the filter icon on the top right side of the query editor. We can use the following fitler array as an example to illustrate more fitlering scenarios.
+Internally, Semaphor represents filters as shown below. You can view the active filters by clicking on the filter icon on the top right side of the query editor. We will use the following fitler array as an example to illustrate how to further finetune your filters.
 
 ```json
 [
@@ -85,9 +85,9 @@ Internally, Semaphor represents the filter array as shown below. You can view th
 
 ---
 
-### Specific Fields
+### Filtering by specific fields
 
-If you want filter a card only for specific fields, you can reference the field value using this syntax `{{ filters['field']| where }}`. For instance, if you want to filter the card only by discount, your card query would look like this:
+If you only want to filter by specific fields, you can reference the field value like `{{ filters['field']| where }}`. For instance, if you want the card to only filter when `discount` field is passed, you can structure your query like this:
 
 ```sql {2} filename="Card SQL"
 SELECT city, COUNT(*) FROM sales_data
@@ -97,7 +97,7 @@ ORDER BY city DESC LIMIT 50
 
 ```
 
-Now, when the user fitlers by `discount` the card query resolves as below:
+Semaphor resolves this query as below omitting `segment` and `city` columns.
 
 ```sql {2} filename="Resolved Query"
 SELECT city, COUNT(*) FROM sales_data
@@ -107,9 +107,7 @@ ORDER BY city DESC LIMIT 50
 
 ```
 
-Note how this query ignores other `segment` and `city` columns.
-
-When doing joins, you may need to pass in the appropriate table aliases for specific fields. Here's how you can do that:
+While doing joins, you may need to pass in the appropriate table aliases for specific fields when there is field overlap between the tables. Here's how you can do that:
 
 ```sql {2} filename="Card SQL"
 SELECT city, COUNT(*) FROM sales_data
@@ -118,7 +116,7 @@ GROUP BY city
 ORDER BY city DESC LIMIT 50
 ```
 
-Now, when the user fitlers by `discount` the card query resolves as below:
+Now, when the user fitlers by `discount` the query resolves as below:
 
 ```sql {2} filename="Resolved Query"
 SELECT city, COUNT(*) FROM sales_data
@@ -131,7 +129,7 @@ ORDER BY city DESC LIMIT 50
 
 ### Excluding Fields
 
-In situations where you need to subscribe to all the filter fields except for specific ones, you can provide a comma-separated list in the array, as shown below. For example, the below card query subscribes to all filter fields except `discount`.
+You many also have a use case where you need to subscribe to all filters except for specific fields. Ycan provide a comma-separated exclusion list. The below card SQL subscribes to all filter fields except `discount`.
 
 ```sql {2} filename="Card SQL"
 SELECT city, COUNT(*)
@@ -140,7 +138,7 @@ GROUP BY city
 ORDER BY city DESC LIMIT 50
 ```
 
-This will resolve to the following query. Note that `discount` field is absent from the `WHERE` clause.
+The above query resolves as follows. Note that `discount` field is absent from the `WHERE` clause.
 
 ```sql {2} filename="Resolved Query"
 SELECT city, COUNT(*) FROM sales_data
@@ -153,7 +151,7 @@ ORDER BY city DESC LIMIT 50
 
 ### Disable Filtering
 
-To prevent a card from filtering, specify `{{ no_filters }}` annotation in the card query. This will unsubscribe the card from the incoming filters.
+To prevent a card from filtering, add `{{ no_filters }}` to the card query. This will unsubscribe the card from all incoming filters.
 
 ---
 
