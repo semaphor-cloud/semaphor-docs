@@ -4,13 +4,13 @@
 
 Semaphor supports two types of filters: **On-click Filter** and **Top-level Filter**.
 
-The **On-click** filter is applied when a user clicks a chart element, such as a bar in a bar chart. By default, the on-click action filters by `X-axis` field/value (and `Y-axis` for vertical orientation) for subscribing cards. This filter type is ideal for cross-card filtering and drill-downs. You have the option to enable or disable this interaction in the explorer view.
+The On-click filter is applied when a user clicks a chart element, such as a bar in a bar chart. By default, the on-click action filters by `X-axis` field/value (and `Y-axis` for vertical orientation) for subscribing cards. This filter type is ideal for cross-card filtering and drill-downs. You have the option to enable or disable this interaction in the explorer view.
 
-The **Top-Level filter** is defined at the top of the dashboard. It becomes a part of your dashboard definition. It is best suited for filtering by continuous data types, such as dates and numbers.
+The Top-Level filter is defined at the top of the dashboard. It becomes a part of your dashboard definition. It is best suited for filtering by continuous data types, such as dates and numbers.
 
 You can set up a filter subscription for your cards using a handlebar syntax `{{ }}`. Currently, we offer two filter functions, `{{ filters | where }}` and `{{ filters | and }}` as a shorthand for the `WHERE` and `AND` clauses.
 
-For instance, the query below represents a card SQL which counts orders by cities.
+For instance, the card SQL below `counts orders by cities`.
 
 ```sql {2} filename="Card SQL"
 SELECT city, COUNT(*) FROM sales_data
@@ -151,7 +151,7 @@ ORDER BY city DESC LIMIT 50
 
 ### Disable Filtering
 
-To prevent a card from filtering, add `{{ no_filters }}` to the card query. This will unsubscribe the card from all incoming filters.
+To disable filtering, annotate your card query with `{{ no_filters }}`. This will unsubscribe the card from all incoming filters.
 
 ---
 
