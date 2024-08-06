@@ -240,9 +240,11 @@ DESC LIMIT 100
 If you want to visualize two cohors side by side for a set of categories, you can create a pyramid chart using the following query structure.
 
 ```sql filename="Card SQL"
-SELECT category, ship_mode, COUNT(*)
+SELECT category, -- dimension field
+ship_mode,  -- cohort field
+COUNT(*) as count -- metric
 FROM sales_data
-WHERE ship_mode in ('Standard Class', 'Second Class') -- cohort
+WHERE ship_mode in ('Standard Class', 'Second Class') -- condition to select two cohorts
 GROUP BY category, ship_mode
 ORDER BY count
 ```
