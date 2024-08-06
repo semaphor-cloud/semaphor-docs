@@ -234,3 +234,30 @@ DESC LIMIT 100
 ```
 
 ![Chart](pages/concepts/visual_images/pie_donut_polar_chart.png)
+
+### Pyramid / Tornado Chart
+
+If you want do visualize two cohors side by side for a set of categories, you can create a pyramid chart using the following query structure.
+
+```sql filename="Card SQL"
+SELECT category, ship_mode, COUNT(*)
+FROM sales_data
+WHERE ship_mode in ('Standard Class', 'Second Class') -- cohort
+GROUP BY category, ship_mode
+ORDER BY count
+```
+
+The `WHERE` clause in the above query narrows the values of `ship_mode` column into two cohorts - `Stadnard Class` and `Second Class`.
+
+```markdown filename="Results"
+| Category        | Ship Mode      | Count |
+| --------------- | -------------- | ----- |
+| Technology      | Second Class   | 366   |
+| Furniture       | Second Class   | 427   |
+| Technology      | Standard Class | 1082  |
+| Office Supplies | Second Class   | 1152  |
+| Furniture       | Standard Class | 1248  |
+| Office Supplies | Standard Class | 3638  |
+```
+
+![Chart](pages/concepts/visual_images/pyramid_chart.png)
