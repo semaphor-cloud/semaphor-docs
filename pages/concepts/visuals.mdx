@@ -435,3 +435,27 @@ The `ship mode` column is used as a grouping column for the ranges.
 ```
 
 ![Chart](pages/concepts/visual_images/split_range_chart_3_values.png)
+
+### Text Visual
+
+The Text Visual is designed to display formatted text based on the results of a query. You can use it to present dynamic content directly from your data source, with the added ability to include HTML tags for custom formatting.
+
+Start by writing a query that returns the data you wish to display. Ensure that the query’s first row contains the value you want to show.
+
+```sql filename="Card SQL"
+SELECT 'I would like to display this text for '  || sub_category as count FROM table
+LIMIT 1
+```
+
+![Chart](pages/concepts/visual_images/dynamic_text.png)
+
+If needed, you can include HTML tags within the value to format the text. For example, you might use `<strong>` for bold text, `<em>` for italics, or `<a>` to create hyperlinks.
+
+```sql filename="Card SQL"
+SELECT '<strong style="color:blue;">Recommendation:</strong>
+<br/> The units in the <em>' || sub_category || '</em> sub category might be getting delayed. A quick inspection could prevent any unexpected surprises.' as text
+FROM table
+LIMIT 1;
+```
+
+![Chart](pages/concepts/visual_images/dynamic_text_styled.png)
