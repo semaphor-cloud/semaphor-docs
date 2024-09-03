@@ -443,7 +443,7 @@ The Text Visual is designed to display formatted text based on the results of a 
 Start by writing a query that returns the data you wish to display. Ensure that the query’s first row contains the value you want to show.
 
 ```sql filename="Card SQL"
-SELECT 'I would like to display this text for '  || sub_category as count FROM table
+SELECT 'I would like to display this text for '  || sub_category as text FROM table
 LIMIT 1
 ```
 
