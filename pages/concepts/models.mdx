@@ -14,9 +14,11 @@ You can create a `base query` from the card explorer as shown below.
 
 ![Base Query](pages/concepts/base_query_images/base_query.png)
 
-<Callout  emoji="⚠️">
-  The name of the `base_query` should be unique and must not match the name of any inner tables within the query. This ensures that there are no conflicts or ambiguities between the base_query and the tables it references.
-</Callout
+<Callout emoji="⚠️">
+  The name of the `base_query` should be unique and must not match the name of
+  any inner tables within the query. This ensures that there are no conflicts or
+  ambiguities between the `base_query` and the tables it references.
+</Callout>
 
 In this example, we create a CTE (Common Table Txpresssion) and place our filter `{{ filters | and }}` as shown below. The `base query` represents the top-level data model that you want to visualize. This can be a single table or a result of join between multiple tables.
 
