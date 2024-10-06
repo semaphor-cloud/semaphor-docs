@@ -103,4 +103,44 @@ mysql+mysqlconnector://username:password@server:port/db
 - `port`: Database port. Default is `3306` for MySQL
 - `db`: Name of the database
 
-### More coming....
+### Microsoft SQL Server
+
+You can connect MS-SQL using a simple connection string as below:
+
+```markdown copy filename="Connection String"
+mssql+pyodbc://username:password@server:port/db?ApplicationIntent=ReadOnly&driver=ODBC+Driver+17+for+SQL+Server
+```
+
+- `username`: Your database user
+- `password`: Password of the user
+- `server`: Database server
+- `port`: Database port. Default is `1433` for MySQL
+- `db`: Name of the database
+
+### Google BigQuery
+
+You can connect BigQuery using the following connection string:
+
+```markdown copy filename="Connection String"
+bigquery://project/dataset
+```
+
+- `project`: Your Google project
+- `dataset`: Dataset name
+
+In addition, you will also need to provide a service account key (key.json). You can follow the below tutorial to generate a service account key.
+
+<br />
+
+<iframe
+  width="560"
+  height="315"
+  src="https://www.youtube.com/embed/q9qHHEk5rVM?si=E6gLP6k9j8pxdVdv&amp;start=35"
+  title="YouTube video player"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  referrerpolicy="strict-origin-when-cross-origin"
+  allowfullscreen
+></iframe>
+
+---
