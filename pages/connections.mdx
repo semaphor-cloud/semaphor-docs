@@ -143,4 +143,26 @@ In addition, you will also need to provide a service account key (key.json). You
   allowfullscreen
 ></iframe>
 
+### Snowflake
+
+You can connect Snowflake using a simple connection string as below:
+
+```markdown copy filename="Connection String"
+snowflake://username:password@organization-account/db
+```
+
+- `username`: Your database user
+- `password`: Password of the user
+- `organization-account`: Your Snowflake organization and account separated by a dash
+- `db`: Name of the database
+
+You can get the your organization and account from your Snowflake url:
+`https://app.snowflake.com/organization/account`
+
+You can also get your current account using the following SQL command:
+
+```sql
+  SELECT CURRENT_ACCOUNT();
+```
+
 ---
