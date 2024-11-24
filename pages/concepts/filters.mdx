@@ -182,3 +182,39 @@ https://jsonplaceholder.typicode.com/todos/1
 ```
 
 Notice that `todos/1` is the default value.
+
+## Loading dashboard with filters
+
+When you load a dashboard with filters, Semaphor will automatically apply the filters to the cards that are subscribed to the filter fields.
+
+You can copy the filter values array by clicking on the filter icon from the console as shown below:
+
+![CLS](pages/concepts/filter-images/filter-values-array.png)
+
+Now you can use this array to load the dashboard with the default filters applied.
+
+```jsx
+import { useDashboardActions, Dashboard } from 'semaphor';
+
+const { setFilterValues } = useDashboardActions();
+
+const defaultFilterValues: TFilterValue[] = [
+  {
+    filterId: '492ca81f-2a85-4fdd-99c7-633ada500da2',
+    connectionType: 'database',
+    name: 'sales_data.category',
+    valueType: 'string',
+    operation: 'in',
+    values: ['Furniture'],
+  },
+];
+
+<Dashboard
+  onFilterValuesChange={handleFilterValuesChange}
+  defaultFilterValues={defaultFilterValues}
+/>;
+```
+
+The `onFilterValuesChange` prop is a callback function that is called when the user changes the filter values. You can use this callback to update the `defaultFilterValues` prop and re-render the dashboard with the new filters applied.
+
+If you don't want to reload the entire dashboard when the filter values change, you can use the `setFilterValues` function to update the filter values. This will apply the the new filters within the same dashboard session.
