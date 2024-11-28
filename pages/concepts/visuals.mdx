@@ -212,6 +212,120 @@ You can convert the above chart into an `area` chart by providing the `fill` pro
 
 ![Chart](pages/concepts/visual_images/stacked_area.png)
 
+#### Stacked Combo
+
+![Chart](pages/concepts/visual_images/stacked_combo_final.png)
+
+To create a stacked combo chart with dual axis, your query must be structured as shown below.
+
+```sql {2-4} filename="Card SQL"
+SELECT segment,
+COUNT(*) as L1,
+AVG(quantity) as L2,
+AVG(profit) as L3,
+
+Avg(sales) as B1,
+AVG(revenue) as B2,
+AVG(cost) as B3
+
+FROM sales_data
+GROUP BY segment
+
+```
+
+```markdown filename="Results"
+| Segment     | L1  | L2  | L3  | B1  | B2  | B3  |
+| ----------- | --- | --- | --- | --- | --- | --- |
+| Home Office | 38  | 38  | 343 | 5   | 4   | 34  |
+| Corporate   | 63  | 39  | 166 | 8   | 4   | 17  |
+| Consumer    | 117 | 37  | 204 | 16  | 4   | 20  |
+```
+
+**Step 1:**
+In this example, we will plot `L1`, `L2`, `L3` columns as lines, and `B1`, `B2`, `B3` columns as stacked bars. But first, we will plot all columns as a `bar` chart and then customize it to meet our requirements.
+
+![Chart](pages/concepts/visual_images/stacked_combo_step_1.png)
+
+**Step 2:**
+Now that we have the chart plotted, we can modify `L1`, `L2`, `L3` as lines by changing the dataset type in the Y-axis settings.
+
+![Chart](pages/concepts/visual_images/stacked_combo_step_2.png)
+
+**Step 3:**
+And finally, need to stack the the bars by setting `stacked` property to `true` for both `x` `(options.scales.x)` and `y` `(options.scales.y)` axes in the chart config.
+
+```json filename="Chart Config"
+"scales": {
+   "y": {
+    ...
+    "stacked": true
+   },
+   "x": {
+    ...
+    "stacked": true
+   }
+}
+```
+
+![Chart](pages/concepts/visual_images/stacked_combo_step_3.png)
+
+**Step 4 - Dual Axis (Optional):**
+You can further customize the chart by adding a secondary y-axis `y1` for the lines
+
+```json filename="Chart Config"
+"y": {
+...
+},
+"y1": {
+    "type": "linear",
+    "display": true,
+    "position": "right",
+    "grid": {
+     "drawOnChartArea": false
+    }
+   }
+
+```
+
+And then assign the `y1` axis to the lines by setting the `yAxisID` property in the dataset config like this:
+
+```json filename="Chart Config"
+"datasets": [
+   {
+    "label": "L1",
+    ...
+     "yAxisID": "y1"
+   },
+   {
+    "label": "L2",
+    ...
+     "yAxisID": "y1"
+   },
+   {
+    "label": "L3",
+    ...
+     "yAxisID": "y1"
+   },
+]
+```
+
+See the [docs](https://www.chartjs.org/docs/latest/samples/line/multi-axis.html) for more details.
+
+![Chart](pages/concepts/visual_images/stacked_combo_step_4.png)
+
+**Step 5 - Axis Range (Optional):**
+In some instances you might want to have different ranges for your y-axes. You can set this range by setting the `min` and `max` properties in the chart config.
+
+```json filename="Chart Config"
+"y1": {
+  ...
+  "min": 0,
+  "max": 120
+}
+```
+
+![Chart](pages/concepts/visual_images/stacked_combo_step_5.png)
+
 ### Pie / Donut / Polar Charts
 
 You can create a pie chart, donut chart, or polar chart using the same SQL syntax.
