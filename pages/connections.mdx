@@ -130,6 +130,12 @@ bigquery://project/dataset
 
 In addition, you will also need to provide a service account key (key.json). You can follow the below tutorial to generate a service account key.
 
+Make sure the service account has the following permissions:
+
+- bigquery.datasets.get – Allows listing datasets in the project.
+- bigquery.datasets.list – Allows listing datasets the user has access to.
+- bigquery.projects.get – Allows getting project metadata.
+
 <br />
 
 <iframe
@@ -142,6 +148,41 @@ In addition, you will also need to provide a service account key (key.json). You
   referrerpolicy="strict-origin-when-cross-origin"
   allowfullscreen
 ></iframe>
+
+#### Global filters with BigQuery
+
+Please be aware that BigQuery has a quirk in that it doesn't accept the _fully-qualified-column-name_ in the WHERE clause. So if you provide a query like below, and filter by country = 'US'.
+
+```sql filename="Card SQL"
+SELECT * FROM my_dataset.my_table {{ filters | where }}
+```
+
+import { Callout } from 'nextra/components';
+
+Semaphor generates the where clause as below:
+
+<Callout type="warning" emoji="⚠️" title="BigQuery Quirk">
+  `SELECT * FROM my_dataset.my_table WHERE my_dataset.my_table.country IN ( 'US'
+  ) `
+</Callout>
+
+The above query throws an error in BigQuery. For all other dbs this is a valid syntax. As a workaround, you need to _alias_ the table when you access it the first time
+
+```sql filename="Card SQL"
+SELECT * FROM my_dataset.my_table as t {{ filters | where }}
+```
+
+This will generate the following query:
+
+```sql filename="Generated Query"
+SELECT * FROM my_dataset.my_table as t WHERE t.country IN ('US')
+```
+
+This is a valid syntax in BigQuery and will run without errors.
+
+---
+
+<br />
 
 ### Snowflake
 
