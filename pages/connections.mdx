@@ -174,7 +174,7 @@ As a workaround, you need to _alias_ the table when you access it the first time
 SELECT * FROM my_dataset.my_table as t {{ filters | where }}
 ```
 
-This will generate the following query:
+For the above query, Semaphor will resolve the filters to the alias `t` and generate the following query:
 
 ```sql filename="Generated Query"
 SELECT * FROM my_dataset.my_table as t WHERE t.country IN ('US')
