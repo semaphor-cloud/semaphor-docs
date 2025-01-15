@@ -166,7 +166,9 @@ Semaphor generates the where clause as below:
   ) `
 </Callout>
 
-The above query throws an error in BigQuery. For all other dbs this is a valid syntax. As a workaround, you need to _alias_ the table when you access it the first time
+The above query throws an error in BigQuery. For all other databases this is a valid syntax.
+
+As a workaround, you need to _alias_ the table when you access it the first time
 
 ```sql filename="Card SQL"
 SELECT * FROM my_dataset.my_table as t {{ filters | where }}
