@@ -349,6 +349,33 @@ DESC LIMIT 100
 
 ![Chart](pages/concepts/visual_images/pie_donut_polar_chart.png)
 
+---
+
+### Radar Chart
+
+You can create a radar chart using the following query structure.
+
+```sql filename="Card SQL"
+SELECT ship_mode, -- label
+AVG(profit) as Avg_Profit, -- measure
+AVG(sales) as Avg_Sales -- measure
+FROM sales_data
+GROUP BY ship_mode
+```
+
+```markdown filename="Results"
+| Ship Mode      | Avg_Profit | Avg_Sales |
+| -------------- | ---------- | --------- |
+| Standard Class | 227.58     | 237.58    |
+| Second Class   | 236.09     | 246.09    |
+| Same Day       | 236.40     | 246.40    |
+| First Class    | 228.50     | 238.50    |
+```
+
+![Chart](pages/concepts/visual_images/radar_chart.png)
+
+---
+
 ### Pyramid / Tornado Chart
 
 If you want to visualize two cohors side by side for a set of categories, you can create a pyramid chart using the following query structure.
