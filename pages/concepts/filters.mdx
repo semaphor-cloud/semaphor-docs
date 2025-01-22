@@ -194,7 +194,9 @@ You can copy the filter values array by clicking on the filter icon from the con
 Now you can use this array to load the dashboard with the default filters applied.
 
 ```jsx
-import { Dashboard } from 'semaphor';
+import { useDashboardActions, Dashboard } from 'semaphor';
+
+const { setFilterValues } = useDashboardActions();
 
 const defaultFilterValues: TFilterValue[] = [
   {
