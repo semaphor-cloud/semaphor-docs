@@ -133,3 +133,24 @@ export default App;
 
 - **Security Note:** Keep the `DASHBOARD_SECRET` secure and do not expose it in client-side code in production. This example is for demonstration purposes only. When deploying in production, obtain the authentication token from a secure, server-side environment.
 - **Fetching the AuthToken:** Before the dashboard can be displayed, an authentication token must be fetched. The `useEffect` hook is used to perform this action when the component mounts.
+
+### Custom Placeholders
+
+Semaphor allows you to customize default placeholders in the dashboard. For example, you can display a custom message or a custom image when the message when the no records are found or when the dashboard session is expired. This allows you to provide a more personalized experience that aligns with your application's branding.
+
+You can customize the placeholders by passing the `placeholders` prop in the `Dashboard` compoent.
+
+```tsx {1-4}
+
+const placeholders = {
+  NoRecords: <div>No records found</div>,
+  SessionExpired: <div>Your session has expired. Please login again.</div>,
+}
+
+<Dashboard
+  ...
+  placeholders={placeholders}
+/>
+```
+
+You can assign any React.ReactNode type to the keys of the placeholders prop, including strings or custom components containing images, text, and other elements. This flexibility enables you to design highly customized placeholders that seamlessly align with your application's design and functionality.
