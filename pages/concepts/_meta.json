@@ -1,5 +1,6 @@
 {
   "visuals": "Visuals",
+  "card-tabs": "Card Tabs",
   "models": "Base Queries",
   "filters": "Filters",
   "security": "Security & Multi-Tenancy"
