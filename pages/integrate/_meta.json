@@ -1,5 +1,6 @@
 {
-  "react-component": "React Component",
-  "vue-component": "Vue Component",
-  "web-component": "Web Component"
+  "react-component": "React Integration",
+  "vue-component": "Vue Integration",
+  "web-component": "Web Component",
+  "auth-token-options": "Auth Token Options"
 }

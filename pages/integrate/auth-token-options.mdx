@@ -1,0 +1,79 @@
+# Auth Token Options
+
+This section outlines the different options available for generating `AuthToken`.
+
+`AuthToken` is a unique, time-sensitive token that secures access to your dashboard. To generate this token, you need to include `dashboardId` and `dashboardSecret` as required fields in the request body, as shown below:
+
+```tsx {5-8}
+const DASHBOARD_ID = 'd_cf007a8b-19bc-46ad-8787-2915445b7b86'; // Replace with your actual dashboard ID
+const DASHBOARD_SECRET = 'ds_f32f0b30-b7e1-40f9-ba6a-9804a5b9d635'; // Replace with your actual dashboard secret
+const TOKEN_URL = 'https://semaphor.cloud/api/v1/token';
+
+const requestBody = {
+  dashboardId: DASHBOARD_ID,
+  dashboardSecret: DASHBOARD_SECRET,
+};
+
+async function fetchToken() {
+  try {
+    const response = await fetch(TOKEN_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const token = await response.json();
+    if (token?.accessToken) {
+      setAuthToken(token);
+    }
+  } catch (error) {
+    console.error('There was an error!', error);
+  }
+}
+```
+
+### Token Expiry
+
+By default, the `AuthToken` is valid for 1 hour. However, you can specify a custom expiry time in the request body. Once the token expires, it will no longer be valid, and you will see a "Session expired" message on the dashboard.
+
+The token expiry is specified in seconds. For example, to set the expiry time to 10 minutes, you can pass `tokenExpiry: 60 * 10` in the request body.
+
+```tsx {4}
+const requestBody = {
+  dashboardId: DASHBOARD_ID,
+  dashboardSecret: DASHBOARD_SECRET,
+  tokenExpiry: 60 * 10, // 10 minutes
+};
+```
+
+This token will remain valid for 10 minutes. This feature is particularly useful if you want to synchronize your application's session timeout with the dashboard, ensuring a seamless and consistent user experience.
+
+### User Params
+
+In some instances, you may want to pass user specific information to the dashboard. For example, the currency of the user's region. You can pass this information in the `params` field in the request body.
+
+```tsx {4}
+const requestBody = {
+  dashboardId: DASHBOARD_ID,
+  dashboardSecret: DASHBOARD_SECRET,
+  params: {
+    currencyFormat: {
+      locale: 'en-US',
+      currency: 'USD',
+    },
+  },
+};
+```
+
+Before rendering the currency for the numbers on the dashboard, Semaphor will first check if the `currencyFormat` is set in the `params` field of the `AuthToken`. If it is, Semaphor will use the currency format specified in the `params` field. If not, Semaphor will default to the currency format specified in the dashboard settings.
+
+The `locale` and the `currency` fields must conform to the [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) format.
+
+### Security Policies
+
+The `AuthToken` also controls what data user can see in the dashboard. You can set up security policies to restrict the data that a user can access. For more information, see [Security & Multi-tenancy](../concepts/security.mdx) section.
