@@ -6,37 +6,44 @@ In the example below, we have a frame with two tabs `Month` and `Week`. The firs
 
 ![Card Tabs](./visual_images/card_tabs.png)
 
-With this setup you can combine related insights into a single frame optimizing the dashboard layout.
+With this setup you can combine related insights into a single frame optimizing the available space on the dashboard.
 
 ### Global Header
 
-You can add a global header to the frame that is displayed on all tabs. In the example below, we have added a KPI card to the frame and named it `All__Header` separated by double underscores.
+You can add a global header that appears above all tabs in a frame. This is useful for displaying important information that applies to all cards, like a summary KPI.
+
+To create a global header:
+
+1. Add a KPI card to the frame
+2. Name it `All__Header` (using double underscores)
+
+The example below shows a global header added to a frame with multiple tabs.
+
+![Card Tabs](./visual_images/card_tabs_header_accepted.png)
 
 ![Card Tabs](./visual_images/card_tabs_header.png)
 
 Note that `All__Header` is a special naming convention. It indicates that Semaphor should display this KPI card as a header for all cards in the frame. When you accept changes, you will see that the KPI card is displayed as a header for all cards in the frame.
 
-![Card Tabs](./visual_images/card_tabs_header_accepted.png)
-
 ### Local Header
 
-Similar to global headers, you can also define a local header for individual cards. Local headers are linked to specific tabs. To name a local header, you follow a similar naming convention:
+In addition to global headers, you can also define a local header for individual cards. Local headers are linked to specific tabs and are displayed only when you switch that specific tab. To name a local header, you follow a similar naming convention:
 
 Name of the tab + `__Header`. Note \_\_ is a double underscore.
 
-For example, if your tab is named `Orders by Month`, the local header should be named `Orders by Month__Header`.
+If your tab is named `Orders by Month`, the local header should be named `Orders by Month__Header`.
 
 ### KPI Card - Info text
 
-Similar to visual cards, you can also add textual descriptions to KPI cards to provide additional context about the numbers. This enhances the user’s understanding of the data displayed on the KPI cards.
+Similar to visual cards, you can also add textual descriptions to KPI cards to provide additional context about the numbers. This can be useful if you want to explain what the numbers mean or recommend actions.
 
-In the following example, we configure a KPI card alongside a descriptive text card:
+In the example below, we have added a KPI card to the frame and named it `Orders by Month`. We have also added a local header named `Info`.
 
 - Monthly Orders (KPI Card Tab): Displays the primary key performance indicators (KPIs).
 - Info: Serves as a description or explanatory text for the KPI card.
 
 ![Card Tabs](./visual_images/kpi_card_tabs.png)
 
-When you accept changes, you will see that the KPI card now has a `lightbulb` icon. Clicking on the icon will display the description card.
+When you accept changes, you will see that the KPI card now has a `lightbulb` button. Clicking on the button will display the info text.
 
 ![Card Tabs](./visual_images/kpi_card_accepted.png)
