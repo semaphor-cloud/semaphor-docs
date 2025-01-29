@@ -1,5 +1,12 @@
 ## React Integration
 
+import { Callout } from 'nextra/components';
+
+<Callout type="warning" emoji="⚠️" title="React 18">
+  Currently, the Semaphor component is only compatible with React 18. We are
+  working on adding support for React 19.
+</Callout>
+
 This section outlines step-by-step instructions on how to integrate the Semaphor dashboard into your React app. We're assuming that you already have a React application in place. If not, you can use the instructions provided [here](https://vitejs.dev/guide/#scaffolding-your-first-vite-project) to bootstrap your React app.
 
 ### 1) Install Semaphor Package
@@ -133,6 +140,124 @@ export default App;
 
 - **Security Note:** Keep the `DASHBOARD_SECRET` secure and do not expose it in client-side code in production. This example is for demonstration purposes only. When deploying in production, obtain the authentication token from a secure, server-side environment.
 - **Fetching the AuthToken:** Before the dashboard can be displayed, an authentication token must be fetched. The `useEffect` hook is used to perform this action when the component mounts.
+
+### Hooks
+
+Semaphor provides a set of hooks that you can use to programmatically interact with the dashboard. These hooks are used to fetch data, update the dashboard, and handle events.
+
+One of the most common ways can use hooks is to add your own styled filters to interact with the dashboard. For example, you might want to display a custom date picker in the dashboard, or consolidate all filters into a dedicated filter panel within your app.
+
+In these cases, you can use hooks to supply data and events to your custom filters.
+
+Currently, Semaphor provides the following hooks (more coming soon):
+
+- `useTextFilter`
+- `useDateFilter`
+
+To use these hooks, you will first need to wrap your parent component with the `SemaphorDataProvider` component.
+
+```tsx filename="App.tsx"
+import { DashboardContainer } from './DashboardContainer';
+import { SemaphorDataProvider } from 'semaphor';
+
+function App() {
+  return (
+    <SemaphorDataProvider>
+      <DashboardContainer>
+    </SemaphorDataProvider>
+  );
+}
+
+```
+
+Next, you will need to get the `filterId` from Semaphor console. You can get the `filterId` from the filter's settings popover, and then hover on the ID icon to see the ID.
+
+![Filter ID](pages/integrate/images/filter_id.png)
+
+Now in the `DashboardContainer` component, you can use the hooks to get the current state of the filter and to update the filter.
+
+```tsx filename="DashboardContainer.tsx"
+import {
+  useDateFilterHook,
+  useTextFilterHook,
+  type TSelectedRecord,
+  type DateRange,
+} from 'semaphor';
+
+function DashboardContainer() {
+  // Access the hooks
+  const {
+    records,
+    selectedRecords, // current selection of the filter
+    handleChange: handleTextFilterChange,
+    handleClear: handleTextFilterClear,
+  } = useTextFilterHook('your_text_filter_id');
+
+  const {
+    initialDataRange, // initial date range of the filter
+    dataRange, // current date range of the filter
+    handleChange: handleDateFilterChange,
+    handleClear: handleDateFilterClear,
+  } = useDateFilterHook('your_date_filter_id');
+
+  function applyTextFilter() {
+    handleTextFilterChange([
+      {
+        id: 'First Class',
+        value: 'First Class',
+      },
+    ] as TSelectedRecord[]);
+  }
+
+  function applyDateFilter() {
+    handleDateFilterChange({
+      from: new Date('2014-01-04T09:00:00Z'),
+      to: new Date('2014-01-20T09:00:00Z'),
+    } as DateRange);
+  }
+
+  return (
+    <div>
+      <h2>My cool dashboard</h2>
+      <button onClick={applyTextFilter}>Apply Text Filters</button>
+      <button onClick={() => handleTextFilterClear()}>Handle Text Clear</button>
+
+      <button onClick={applyDateFilter}>Apply Date Filters</button>
+      <button onClick={() => handleDateFilterClear()}>Handle Date Clear</button>
+
+      <Dashboard authToken={authToken} id={DASHBOARD_ID} />
+    </div>
+  );
+}
+```
+
+In the above example, we are setting the static values for the text and date filters. But you can use your custom dropdowns or date pickers like this:
+
+```tsx
+// pseudo code
+
+const {
+  records,
+  selectedRecords, // current selection of the filter
+  handleChange: handleTextFilterChange,
+  handleClear: handleTextFilterClear,
+} = useTextFilterHook('your_text_filter_id');
+
+return (
+  <select
+    value={selectedRecords[0]?.value}
+    onChange={(e) =>
+      handleTextFilterChange([{ id: e.target.value, value: e.target.value }])
+    }
+  >
+    {records?.map((record) => (
+      <option key={record.id} value={record.value}>
+        {record.value}
+      </option>
+    ))}
+  </select>
+);
+```
 
 ### Custom Placeholders
 
