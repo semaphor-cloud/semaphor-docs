@@ -170,11 +170,11 @@ function App() {
 
 ```
 
-Next, you will need to get the `filterId` from Semaphor console. You can get the `filterId` from the filter's settings (⚙️) popover, and then hover on the ID icon to see the ID.
+Next, you will need to get the `filterId` from Semaphor console. You can get the `filterId` from the filter's settings (⚙️) popover, and then hover on the ID icon to see the `filterId`.
 
 ![Filter ID](pages/integrate/images/filter_id.png)
 
-Now in the `DashboardContainer` component, you can use the hooks to get the current state of the filter and to update the filter.
+Now in the `DashboardContainer` component, you can use the hooks to get and set the state of filters.
 
 ```tsx filename="DashboardContainer.tsx"
 import {
